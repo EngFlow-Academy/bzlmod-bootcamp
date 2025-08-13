@@ -1,0 +1,7 @@
+EngFlow Bzlmod Migration Bootcamp
+Copyright 2025 EngFlow, Inc.
+
+This product includes software developed at EngFlow (https://engflow.com/).
+
+This software contains code derived and adapted from several components of:
+- https://github.com/bazel-contrib/rules_scala/tree/v7.1.4
