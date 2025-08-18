@@ -1,0 +1,45 @@
+{
+  "C_Cpp.copilotHover": "disabled",
+  "chat.agent.enabled": false,
+  "chat.agent.maxRequests": 0,
+  "chat.commandCenter.enabled": false,
+  "telemetry.feedback.enabled": false,
+  "workbench.settings.showAISearchToggle": false,
+  "chat.checkpoints.enabled": false,
+  "chat.detectParticipant.enabled": false,
+  "chat.extensionTools.enabled": false,
+  "chat.implicitContext.suggestedContext": false,
+  "chat.mcp.discovery.enabled": {
+    "claude-desktop": false,
+    "windsurf": false,
+    "cursor-global": false,
+    "cursor-workspace": false
+  },
+  "chat.promptFiles": false,
+  "chat.promptFilesLocations": {
+    ".github/prompts": false
+  },
+  "chat.sendElementsToChat.attachCSS": false,
+  "chat.sendElementsToChat.attachImages": false,
+  "chat.sendElementsToChat.enabled": false,
+  "chat.tools.terminal.autoApprove": {
+    "rm": false,
+    "rmdir": false,
+    "del": false,
+    "kill": false,
+    "curl": false,
+    "wget": false,
+    "eval": false,
+    "chmod": false,
+    "chown": false,
+    "/^Remove-Item\\b/i": false
+  },
+  "chat.tools.useTreePicker": false,
+  "chat.undoRequests.restoreInput": false,
+  "chat.useFileStorage": true,
+  "inlineChat.accessibleDiffView": "off",
+  "inlineChat.holdToSpeech": false,
+  "inlineChat.lineNaturalLanguageHint": false,
+  "notebook.experimental.generate": false,
+  "chat.mcp.access": "none"
+}
