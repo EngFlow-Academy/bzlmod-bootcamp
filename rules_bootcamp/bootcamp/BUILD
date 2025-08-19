@@ -14,6 +14,7 @@
 
 load(
     "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl",
+    "bootcamp_library",
     "bootcamp_toolchain",
 )
 
@@ -35,4 +36,8 @@ toolchain(
     name = "default_settings_toolchain",
     toolchain = ":default_settings",
     toolchain_type = ":toolchain_type",
+)
+
+bootcamp_library(
+    name = "default-values",
 )

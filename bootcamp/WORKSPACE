@@ -14,8 +14,6 @@
 
 workspace(name = "io_frobozzco_bzlmod_bootcamp")
 
-#load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
 local_repository(
     name = "io_frobozzco_rules_bootcamp",
     path = "../rules_bootcamp"
