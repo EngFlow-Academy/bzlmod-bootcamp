@@ -1,63 +1,71 @@
 """Generates the @io_bazel_rules_bootcamp_config repo.
 
-Modeled after @rules_bootcamp//bootcamp_config.bzl.
+Modeled after @rules_scala//scala_config.bzl.
 """
 
 DEFAULT_BOOTCAMP_VERSION = "1.2.3"
 
-def _config_setting(bootcamp_version):
-    return """config_setting(
-    name = "bootcamp_version{version_suffix}",
+_CONFIG_BUILD = """load("@bazel_skylib//rules:common_settings.bzl", "string_setting")
+
+string_setting(
+    name = "bootcamp_version",
+    build_setting_default = "{version}",
+    values = {versions},
+    visibility = ["//visibility:public"],
+)
+
+"""
+
+_CONFIG_SETTING = """config_setting(
+    name = "bootcamp_version_{version.replace(".", "_")}",
     flag_values = {{":bootcamp_version": "{version}"}},
     visibility = ["//visibility:public"],
 )
-""".format(version_suffix = version_suffix(bootcamp_version), version = bootcamp_version)
+"""
 
-def _config_settings(bootcamp_versions):
-    return "".join([_config_setting(v) for v in bootcamp_versions])
+def _build_file_content(version, versions):
+    return (
+        _CONFIG_BUILD.format(version = version, versions = versions)
+        + "\n".join([_CONFIG_SETTING.format(version = v) for v in versions])
+        + "\n"
+    )
+
+def _config_file_content(version, versions, enable_some_feature):
+    return "\n".join([
+        "BOOTCAMP_VERSION = \"" + version + "\"",
+        "BOOTCAMP_VERSIONS = " + str(versions),
+        "ENABLE_SOME_FEATURE = " + enable_some_feature,
+    ]) + "\n"
 
 def _store_config(repository_ctx):
+    rctx_env = repository_ctx.os.environ
+    rctx_attr = repository_ctx.attr
+
     # Default version
-    bootcamp_version = repository_ctx.os.environ.get(
-        "BOOTCAMP_VERSION",
-        repository_ctx.attr.bootcamp_version,
+    version = rctx_env.get("BOOTCAMP_VERSION", rctx_attr.bootcamp_version)
+    enable_some_feature = rctx_env.get(
+        "ENABLE_SOME_FEATURE",
+        str(rctx_attr.enable_some_feature),
     )
 
-    bootcamp_versions = repository_ctx.attr.bootcamp_versions
-    if not bootcamp_versions:
-        bootcamp_versions = [bootcamp_version]
-    elif bootcamp_version not in bootcamp_versions:
+    versions = rctx_attr.bootcamp_versions
+    if not versions:
+        versions = [version]
+    elif version not in versions:
         fail(
             "You have to include the default bootcamp version " +
-            "(%s) in the `bootcamp_versions` list." % bootcamp_version
+            "(%s) in the `bootcamp_versions` list." % version
         )
 
-    enable_dependency_tracking = repository_ctx.os.environ.get(
-        "ENABLE_DEPENDENCY_TRACKING",
-        str(repository_ctx.attr.enable_compiler_dependency_tracking),
+    repository_ctx.file("BUILD", _build_file_content(version, versions))
+    repository_ctx.file(
+        "config.bzl",
+        _config_file_content(
+            version,
+            versions,
+            enable_some_feature,
+        ),
     )
-
-    config_file_content = "\n".join([
-        "BOOTCAMP_VERSION='" + bootcamp_version + "'",
-        "BOOTCAMP_VERSIONS=" + str(bootcamp_versions),
-        "ENABLE_DEPENDENCY_TRACKING=" + enable_dependency_tracking,
-    ])
-
-    build_file_content = """load("@bazel_skylib//rules:common_settings.bzl", "string_setting")
-string_setting(
-    name = "bootcamp_version",
-    build_setting_default = "{bootcamp_version}",
-    values = {bootcamp_versions},
-    visibility = ["//visibility:public"],
-)
-""".format(
-    bootcamp_version = bootcamp_version,
-    bootcamp_versions = bootcamp_versions,
-)
-    build_file_content += _config_settings(bootcamp_versions)
-
-    repository_ctx.file("config.bzl", config_file_content)
-    repository_ctx.file("BUILD", build_file_content)
 
 _config_repository = repository_rule(
     implementation = _store_config,
@@ -74,11 +82,12 @@ _config_repository = repository_rule(
                 "Must include the default version."
             ),
         ),
-        "enable_dependency_tracking": attr.bool(
-            mandatory = True,
+        "enable_some_feature": attr.bool(
+            default = False,
+            doc = "Boolean to enable or disable some feature",
         ),
     },
-    environ = ["BOOTCAMP_VERSION", "ENABLE_DEPENDENCY_TRACKING"],
+    environ = ["BOOTCAMP_VERSION", "ENABLE_SOME_FEATURE"],
 )
 
 def bootcamp_config(
