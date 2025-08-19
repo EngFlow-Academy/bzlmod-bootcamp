@@ -23,7 +23,9 @@ rules_proto_toolchains()
 
 load("@io_frobozzco_rules_bootcamp//bootcamp:config.bzl", "bootcamp_config")
 
-bootcamp_config()
+bootcamp_config(
+    versions = ["1.2.3", "4.5.6", "7.8.9"],
+)
 
 load(
     "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl",
