@@ -11,3 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+load("@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl", "bootcamp_library")
+
+bootcamp_library(
+    name = "default-values",
+)

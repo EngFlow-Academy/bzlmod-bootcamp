@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-workspace(name = "io_bazel_bzlmod_bootcamp")
+workspace(name = "io_frobozzco_bzlmod_bootcamp")
 
 #load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 local_repository(
-    name = "io_bazel_rules_bootcamp",
+    name = "io_frobozzco_rules_bootcamp",
     path = "../rules_bootcamp"
 )
 
-load("@io_bazel_rules_bootcamp//bootcamp:deps.bzl", "rules_bootcamp_deps")
+load("@io_frobozzco_rules_bootcamp//bootcamp:deps.bzl", "rules_bootcamp_deps")
 
 rules_bootcamp_deps()
 
@@ -62,3 +62,14 @@ maven_install(
     ],
     maven_install_json = "//:maven_install.json",
 )
+
+load("@io_frobozzco_rules_bootcamp//bootcamp:config.bzl", "bootcamp_config")
+
+bootcamp_config()
+
+load(
+    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl",
+    "bootcamp_register_toolchains",
+)
+
+bootcamp_register_toolchains()

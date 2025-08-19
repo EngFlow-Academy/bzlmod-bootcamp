@@ -12,5 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def bootcamp_register_toolchains():
-    native.register_toolchains("@io_frobozzco_rules_bootcamp//bootcamp:all")
+""""""
+
+load(
+    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_library.bzl",
+    _bootcamp_library = "bootcamp_library",
+)
+load(
+    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_toolchain.bzl",
+    _bootcamp_toolchain = "bootcamp_toolchain",
+)
+load(
+    "@io_frobozzco_rules_bootcamp//bootcamp:toolchains.bzl",
+    _bootcamp_register_toolchains = "bootcamp_register_toolchains",
+)
+
+bootcamp_library = _bootcamp_library
+bootcamp_toolchain = _bootcamp_toolchain
+bootcamp_register_toolchains = _bootcamp_register_toolchains

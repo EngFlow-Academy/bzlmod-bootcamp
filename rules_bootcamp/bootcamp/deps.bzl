@@ -20,11 +20,21 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 def rules_bootcamp_deps():
     maybe(
         http_archive,
+        name = "bazel_skylib",
+        sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
+        ],
+    )
+
+    maybe(
+        http_archive,
         name = "rules_java",
         urls = [
-            "https://github.com/bazelbuild/rules_java/releases/download/7.6.0/rules_java-7.6.0.tar.gz",
+            "https://github.com/bazelbuild/rules_java/releases/download/7.10.0/rules_java-7.10.0.tar.gz",
         ],
-        sha256 = "1da22389fe688c515ed732d01a2b18f3961eb4431aec40dcbaa043b58ba7941e",
+        sha256 = "eb5447f019734b0c4284eaa5f8248415084da5445ba8201c935a211ab8af43a0",
     )
 
     maybe(
