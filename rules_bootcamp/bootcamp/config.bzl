@@ -17,16 +17,20 @@ string_setting(
 """
 
 _CONFIG_SETTING = """config_setting(
-    name = "bootcamp_version_{version.replace(".", "_")}",
+    name = "bootcamp_version_{suffix}",
     flag_values = {{":bootcamp_version": "{version}"}},
     visibility = ["//visibility:public"],
 )
 """
 
 def _build_file_content(version, versions):
+    version_suffix = version.replace(".", "_")
     return (
         _CONFIG_BUILD.format(version = version, versions = versions)
-        + "\n".join([_CONFIG_SETTING.format(version = v) for v in versions])
+        + "\n".join([
+            _CONFIG_SETTING.format(version = v, suffix = version_suffix)
+            for v in versions
+        ])
         + "\n"
     )
 
@@ -93,10 +97,10 @@ _config_repository = repository_rule(
 def bootcamp_config(
         bootcamp_version = DEFAULT_BOOTCAMP_VERSION,
         bootcamp_versions = [],
-        enable_compiler_dependency_tracking = False):
+        enable_some_feature = False):
     _config_repository(
-        name = "rules_bootcamp_config",
+        name = "io_frobozzco_rules_bootcamp_config",
         bootcamp_version = bootcamp_version,
         bootcamp_versions = bootcamp_versions,
-        enable_compiler_dependency_tracking = enable_compiler_dependency_tracking,
+        enable_some_feature = enable_some_feature,
     )
