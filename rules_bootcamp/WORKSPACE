@@ -4,40 +4,25 @@ load("@io_frobozzco_rules_bootcamp//bootcamp:deps.bzl", "rules_bootcamp_deps")
 
 rules_bootcamp_deps()
 
-# `rules_java` 8.x suggests loading `protobuf_deps()` after
-# `rules_java_dependencies` and before `rules_java_toolchains()`.
-# `rules_java` 7.x also works with this ordering.
-# - https://github.com/bazelbuild/rules_java/releases/tag/8.9.0
 load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
+
 rules_java_dependencies()
-
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
-
-protobuf_deps()
 rules_java_toolchains()
 
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
 rules_proto_dependencies()
-
-load("@rules_proto//proto:setup.bzl", "rules_proto_setup")
-rules_proto_setup()
-
-load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
+rules_java_toolchains()
 rules_proto_toolchains()
 
-load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
-rules_jvm_external_deps()
+load("@io_frobozzco_rules_bootcamp//bootcamp:config.bzl", "bootcamp_config")
 
-load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
-rules_jvm_external_setup()
+bootcamp_config()
 
-load("@rules_jvm_external//:defs.bzl", "maven_install")
-maven_install(
-    artifacts = [
-        #"org.seleniumhq.selenium:selenium-java:4.28.1",
-    ],
-    repositories = [
-        "https://repo1.maven.org/maven2",
-    ],
-    maven_install_json = "//:maven_install.json",
+load(
+    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl",
+    "bootcamp_register_toolchains",
 )
+
+bootcamp_register_toolchains()
+
