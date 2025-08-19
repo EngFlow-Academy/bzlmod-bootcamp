@@ -1,7 +1,5 @@
 """Bootcamp rules and macros"""
 
-load("@rules_java//java/common:java_common.bzl", "java_common")
-
 _ATTRS = {
     "version": attr.string(),
     "some_feature": attr.bool(),
