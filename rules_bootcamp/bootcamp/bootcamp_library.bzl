@@ -2,7 +2,6 @@
 
 _ATTRS = {
     "version": attr.string(),
-    "some_feature": attr.bool(),
     "java_compile_toolchain": attr.label(
         default = "@bazel_tools//tools/jdk:current_java_toolchain",
         providers = [java_common.JavaToolchainInfo],
@@ -18,7 +17,7 @@ _TOOLCHAIN_TYPE = "@io_frobozzco_rules_bootcamp//bootcamp:toolchain_type"
 def _bootcamp_library_impl(ctx):
     info = ctx.toolchains[_TOOLCHAIN_TYPE].bootcamp_info
     version = ctx.attr.version or info.version
-    some_feature = getattr(ctx.attr, "some_feature", info.some_feature)
+    some_feature = info.some_feature
 
     if version not in info.versions:
         fail("rules_bootcamp version %s not in: %s" % (version, info.versions))

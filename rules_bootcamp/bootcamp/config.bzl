@@ -46,13 +46,13 @@ def _store_config(repository_ctx):
     rctx_attr = repository_ctx.attr
 
     # Default version
-    version = rctx_env.get("BOOTCAMP_VERSION", rctx_attr.bootcamp_version)
+    version = rctx_env.get("BOOTCAMP_VERSION", rctx_attr.version)
     enable_some_feature = rctx_env.get(
         "ENABLE_SOME_FEATURE",
         str(rctx_attr.enable_some_feature),
     )
 
-    versions = rctx_attr.bootcamp_versions
+    versions = rctx_attr.versions
     if not versions:
         versions = [version]
     elif version not in versions:
@@ -75,11 +75,11 @@ _config_repository = repository_rule(
     implementation = _store_config,
     doc = "rules_bootcamp configuration parameters",
     attrs = {
-        "bootcamp_version": attr.string(
+        "version": attr.string(
             mandatory = True,
             doc = "Default Bootcamp version",
         ),
-        "bootcamp_versions": attr.string_list(
+        "versions": attr.string_list(
             mandatory = True,
             doc = (
                 "List of all Bootcamp versions to configure. " +
@@ -95,12 +95,12 @@ _config_repository = repository_rule(
 )
 
 def bootcamp_config(
-        bootcamp_version = DEFAULT_BOOTCAMP_VERSION,
-        bootcamp_versions = [],
+        version = DEFAULT_BOOTCAMP_VERSION,
+        versions = [],
         enable_some_feature = False):
     _config_repository(
         name = "io_frobozzco_rules_bootcamp_config",
-        bootcamp_version = bootcamp_version,
-        bootcamp_versions = bootcamp_versions,
+        version = version,
+        versions = versions,
         enable_some_feature = enable_some_feature,
     )
