@@ -1,0 +1,10 @@
+# Select legacy `WORKSPACE` builds vs Bzlmod builds. Remove once Bazel 9 becomes
+# the minimum supported version, since it only supports Bzlmod.
+#
+# --enable_bzlmod defaults to `false` in Bazel 6 and `true` in Bazel 7.
+# --noenable_bzlmod ensures Bazel does _not_ create an empty MODULE.bazel file
+# when it doesn't already exist.
+#
+# --enable_workspace doesn't exist in Bazel 6. It defaults to `true` in Bazel 7
+# and `false` in Bazel 8.
+common --noenable_bzlmod #--enable_workspace
