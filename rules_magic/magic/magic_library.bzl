@@ -76,5 +76,8 @@ magic_library = rule(
     attrs = _ATTRS,
     fragments = ["java"],
     provides = [JavaInfo],
-    toolchains = [_TOOLCHAIN_TYPE],
+    toolchains = [
+        _TOOLCHAIN_TYPE,
+        "@bazel_tools//tools/jdk:toolchain_type",
+    ],
 )
