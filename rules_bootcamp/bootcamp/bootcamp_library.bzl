@@ -1,4 +1,4 @@
-"""Bootcamp rules and macros"""
+"""bootcamp_library implementation"""
 
 _ATTRS = {
     "version": attr.string(),
