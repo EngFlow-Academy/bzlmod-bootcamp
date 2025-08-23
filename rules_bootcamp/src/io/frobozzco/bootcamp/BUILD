@@ -12,20 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load(
-    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl",
-    "bootcamp_digests",
-    "bootcamp_library",
-)
+load("@rules_java//java:defs.bzl", "java_binary")
 
-bootcamp_library(
-    name = "default-values",
-)
-
-bootcamp_digests(
-    name = "hello",
-    deps = [
-        ":default-values",
-        ":hello.txt",
-    ],
+java_binary(
+    name = "EmitDigestsWorker",
+    srcs = [":EmitDigestsWorker.java"],
+    deps = ["@bazel_tools//src/main/protobuf:worker_protocol_java_proto"],
+    visibility = ["//visibility:public"],
 )

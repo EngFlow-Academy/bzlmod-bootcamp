@@ -12,8 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""""""
+"""rules_bootcamp public API"""
 
+load(
+    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_digests.bzl",
+    _bootcamp_digests = "bootcamp_digests",
+)
 load(
     "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_library.bzl",
     _bootcamp_library = "bootcamp_library",
@@ -27,6 +31,7 @@ load(
     _bootcamp_register_toolchains = "bootcamp_register_toolchains",
 )
 
+bootcamp_digests = _bootcamp_digests
 bootcamp_library = _bootcamp_library
 bootcamp_toolchain = _bootcamp_toolchain
 bootcamp_register_toolchains = _bootcamp_register_toolchains
