@@ -23,3 +23,11 @@ def rules_magic_deps():
             "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
         ],
     )
+
+    maybe(
+        http_archive,
+        name = "rules_python",
+        sha256 = "c6fb25d0ba0246f6d5bd820dd0b2e66b339ccc510242fd4956b9a639b548d113",
+        strip_prefix = "rules_python-0.37.2",
+        url = "https://github.com/bazelbuild/rules_python/releases/download/0.37.2/rules_python-0.37.2.tar.gz",
+    )
