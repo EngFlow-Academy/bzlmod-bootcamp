@@ -32,6 +32,10 @@ load(
 
 rules_magic_deps()
 
+load("@rules_python//python:repositories.bzl", "py_repositories")
+
+py_repositories()
+
 load(
     "@rules_java//java:repositories.bzl",
     "rules_java_dependencies",
