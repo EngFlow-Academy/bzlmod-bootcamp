@@ -29,13 +29,10 @@ def rules_magic_deps():
 
     maybe(
         http_archive,
-        name = "rules_proto",
-        sha256 = "dc3fb206a2cb3441b485eb1e423165b231235a1ea9b031b4433cf7bc1fa460dd",
-        strip_prefix = "rules_proto-5.3.0-21.7",
-        urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
-            "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
-        ],
+        name = "com_google_protobuf",
+        sha256 = "75be42bd736f4df6d702a0e4e4d30de9ee40eac024c4b845d17ae4cc831fe4ae",
+        strip_prefix = "protobuf-21.7",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.7.tar.gz",
     )
 
     maybe(
