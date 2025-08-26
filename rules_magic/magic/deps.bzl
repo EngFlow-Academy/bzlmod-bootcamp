@@ -40,9 +40,9 @@ def rules_magic_deps():
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "e4ff2aeb767da6f4f52485c2e72468960ddfe5262483879ef6ad552e52757a77",
-        strip_prefix = "protobuf-27.2",
-        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v27.2.tar.gz",
+        sha256 = "13e7749c30bc24af6ee93e092422f9dc08491c7097efa69461f88eb5f61805ce",
+        strip_prefix = "protobuf-28.0",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v28.0.tar.gz",
     )
 
     maybe(
