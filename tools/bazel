@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+#
+# Copyright 2025 EngFlow, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# ---
+#
+# Wraps `bazelisk` to use a different `.bazelrc` for Bazel 6 and to use a custom
+# Bazel 6 binary via `BAZEL_6_BINARY`.
+#
+# If necessary, build a custom Bazel 6.5.0 binary for macOS 26 Tahoe:
+# - https://github.com/bazelbuild/bazel/issues/27026#issuecomment-3310370835
+
+set -euo pipefail
+
+if [[ -z "${BAZELISK_SKIP_WRAPPER:-}" ]]; then
+  printf '%s\n' \
+    'Please install Bazelisk and use `bazel` to invoke this script:' \
+    'https://github.com/bazelbuild/bazelisk' >&2
+  exit 1
+fi
+
+module="${PWD##*/}"
+
+if [[ "$module" != 'bootcamp' && "$module" != 'rules_magic' ]]; then
+  echo 'Please run `bazel` from the "bootcamp" or "rules_magic" repository.' >&2
+  exit 1
+fi
+
+bazel=('bazelisk')
+
+if [[ "${USE_BAZEL_VERSION:-}" =~ ^6\. ]]; then
+  if [[ -n "${BAZEL_6_BINARY:-}" ]]; then
+    bazel=("$BAZEL_6_BINARY")
+  fi
+
+  # The Bootcamp only supports legacy `WORKSPACE` builds for Bazel 6.5.0.
+  # --noenable_bzlmod is the default, and --enable_workspace doesn't exist, so
+  # we avoid reading the .bazelrc file.
+  bazel+=('--bazelrc=../.bazelrc-cxxopts' '--noworkspace_rc')
+fi
+
+exec "${bazel[@]}" "$@"
