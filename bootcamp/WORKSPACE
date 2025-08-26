@@ -47,6 +47,11 @@ load("@rules_python//python:repositories.bzl", "py_repositories")
 
 py_repositories()
 
+# Note that `rules_java` 8.x suggests loading `protobuf_deps()` after
+# `rules_java_dependencies` and before `rules_java_toolchains()`:
+# - https://github.com/bazelbuild/rules_java/releases/tag/8.9.0
+#
+# `rules_java` 7.x also works with this ordering.
 load(
     "@rules_java//java:repositories.bzl",
     "rules_java_dependencies",
@@ -55,17 +60,11 @@ load(
 
 rules_java_dependencies()
 
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+
+protobuf_deps()
+
 rules_java_toolchains()
-
-load(
-    "@rules_proto//proto:repositories.bzl",
-    "rules_proto_dependencies",
-    "rules_proto_toolchains",
-)
-
-rules_proto_dependencies()
-
-rules_proto_toolchains()
 
 rules_magic_leaflet_repository()
 
