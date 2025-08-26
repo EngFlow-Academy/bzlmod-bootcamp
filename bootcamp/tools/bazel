@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#
+# Wraps `bazelisk` to use a different `.bazelrc` for Bazel 6 and to use a custom
+# Bazel 6 binary via `BAZEL_6_BINARY`.
+#
+# If necessary, build a custom Bazel 6.5.0 binary for macOS 26 Tahoe:
+# - https://github.com/bazelbuild/bazel/issues/27026#issuecomment-3310370835
+
+set -euo pipefail
+
+if [[ -z "${BAZELISK_SKIP_WRAPPER:-}" ]]; then
+  printf '%s\n' \
+    "Please install Bazelisk and use \`bazel\` to invoke this script:" \
+    "https://github.com/bazelbuild/bazelisk" >&2
+  exit 1
+fi
+
+bazel=('bazelisk')
+
+if [[ "${USE_BAZEL_VERSION:-}" =~ ^6\. ]]; then
+  if [[ -n "${BAZEL_6_BINARY:-}" ]]; then
+    bazel=("$BAZEL_6_BINARY")
+  fi
+
+  bazel+=("--bazelrc=../.bazel6rc" '--noworkspace_rc')
+fi
+
+exec "${bazel[@]}" "$@"

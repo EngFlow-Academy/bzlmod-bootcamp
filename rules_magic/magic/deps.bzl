@@ -21,12 +21,21 @@ def rules_magic_deps():
         url = "https://github.com/bazelbuild/rules_proto/releases/download/6.0.2/rules_proto-6.0.2.tar.gz",
     )
 
+    # Needed by Bazel 6.5.0 to compile protobuf without C++14 flags in .bazelrc.
+    #maybe(
+    #    http_archive,
+    #    name = "com_google_absl",
+    #    sha256 = "91ac87d30cc6d79f9ab974c51874a704de9c2647c40f6932597329a282217ba8",
+    #    strip_prefix = "abseil-cpp-20220623.1",
+    #    url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20220623.1.tar.gz",
+    #)
+
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "75be42bd736f4df6d702a0e4e4d30de9ee40eac024c4b845d17ae4cc831fe4ae",
-        strip_prefix = "protobuf-21.7",
-        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.7.tar.gz",
+        sha256 = "e4ff2aeb767da6f4f52485c2e72468960ddfe5262483879ef6ad552e52757a77",
+        strip_prefix = "protobuf-27.2",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v27.2.tar.gz",
     )
 
     maybe(

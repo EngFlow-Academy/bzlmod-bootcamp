@@ -1,0 +1,15 @@
+# Used by bootcamp/tools/bazel to support Bazel 6 builds more easily.
+
+# The Bootcamp only supports legacy `WORKSPACE` builds for Bazel 6.5.0.
+# --noenable_bzlmod is the default.
+
+# protobuf >= v22.0 requires abseil >= 20230125.0, which requires c++17. See:
+# - https://github.com/bazel-contrib/rules_scala/issues/1647
+common --enable_platform_specific_config
+
+common:linux --cxxopt=-std=c++17
+common:linux --host_cxxopt=-std=c++17
+common:macos --cxxopt=-std=c++17
+common:macos --host_cxxopt=-std=c++17
+common:windows --cxxopt=/std=c++17
+common:windows --host_cxxopt=/std=c++17
