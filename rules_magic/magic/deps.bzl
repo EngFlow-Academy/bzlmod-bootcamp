@@ -47,22 +47,21 @@ def rules_magic_deps():
     #)
 
     # The Bazel 9 build requires protobuf >= 32.0 in MODULE.bazel to avoid
-    # warnings. However, protobuf v30 removes py_proto_library from its
-    # //protobuf.bzl file, which the @bazel_tools//src/main/protobuf package
-    # requires. After the upcoming "Replace @bazel_tools with @bazel_worker_api"
-    # commit, we can bump this to a newer version. See: bazelbuild/bazel#26579.
+    # warnings. protobuf v30 removed py_proto_library from its //protobuf.bzl
+    # file, which the @bazel_tools//src/main/protobuf package requires. But
+    # since we've replaced the @bazel_tools dependency with @bazel_worker_api,
+    # we can bump this to a newer version. See: bazelbuild/bazel#26579.
     #
     # Also, protobuf v32 explicitly breaks Bazel 6 compatibility. Bazel 9 drops
-    # the legacy WORKSPACE model completely, so we'll eventually update to the
-    # latest protobuf version that still supports Bazel 6. If you don't care
-    # about Bazel 6 compatibility, bump this to the same version as in
-    # MODULE.bazel. (Again, after the upcoming @bazel_worker_api commit.)
+    # the legacy WORKSPACE model completely, so we use the latest protobuf
+    # version that still supports Bazel 6. If you don't care about Bazel 6
+    # compatibility, bump this to the same version as in MODULE.bazel.
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "955ef3235be41120db4d367be81efe6891c9544b3a71194d80c3055865b26e09",
-        strip_prefix = "protobuf-29.5",
-        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v29.5.tar.gz",
+        sha256 = "c3a0a9ece8932e31c3b736e2db18b1c42e7070cd9b881388b26d01aa71e24ca2",
+        strip_prefix = "protobuf-31.1",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v31.1.tar.gz",
     )
 
     # Required by Bazel 8.3.0 and above, since the legacy WORKSPACE suffix loads
@@ -95,4 +94,14 @@ def rules_magic_deps():
         sha256 = "9f9f3b300a9264e4c77999312ce663be5dee9a56e361a1f6fe7ec60e1beef9a3",
         strip_prefix = "rules_python-1.4.1",
         url = "https://github.com/bazel-contrib/rules_python/releases/download/1.4.1/rules_python-1.4.1.tar.gz",
+    )
+
+    maybe(
+        http_archive,
+        name = "bazel_worker_api",
+        sha256 = "5aac6ae6a23015cc7984492a114dc539effc244ec5ac7f8f6b1539c15fb376eb",
+        urls = [
+            "https://github.com/bazelbuild/bazel-worker-api/releases/download/v0.0.6/bazel-worker-api-v0.0.6.tar.gz",
+        ],
+        strip_prefix = "bazel-worker-api-0.0.6/proto",
     )
