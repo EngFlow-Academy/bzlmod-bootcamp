@@ -13,8 +13,7 @@
 # limitations under the License.
 
 load(
-    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl",
-    "bootcamp_library",
+    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_toolchain.bzl",
     "bootcamp_toolchain",
 )
 
