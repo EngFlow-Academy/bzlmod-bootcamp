@@ -17,10 +17,17 @@
 module(name = "rules_magic")
 
 bazel_dep(name = "rules_java", version = "8.16.1")
+bazel_dep(name = "bazel_worker_api", version = "0.0.6")
 
-# If you have dependencies that require it, add:
-#   repo_name = "com_google_protobuf")
-bazel_dep(name = "protobuf", version = "32.1")
+# Importing `protobuf` without `repo_name = "com_google_protobuf"` breaks
+# compatibility with legacy `WORKSPACE` builds. Bazel will silently use a
+# different `com_google_protobuf` version for its `@bazel_tools` repo. Bazel 6
+# and 7 builds will complete, but Bazel 8 builds will fail.
+bazel_dep(
+    name = "protobuf",
+    version = "32.1",
+    repo_name = "com_google_protobuf",
+)
 
 config = use_extension(
     "//magic/extensions:config.bzl",
