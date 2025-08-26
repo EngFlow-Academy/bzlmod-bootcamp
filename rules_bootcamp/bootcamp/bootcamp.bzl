@@ -9,15 +9,15 @@ load(
     _bootcamp_library = "bootcamp_library",
 )
 load(
-    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_toolchain.bzl",
-    _bootcamp_toolchain = "bootcamp_toolchain",
+    "@io_frobozzco_rules_bootcamp//bootcamp:deps.bzl",
+    _rules_bootcamp_deps = "rules_bootcamp_deps",
 )
 load(
     "@io_frobozzco_rules_bootcamp//bootcamp:toolchains.bzl",
-    _bootcamp_register_toolchains = "bootcamp_register_toolchains",
+    _rules_bootcamp_toolchains = "rules_bootcamp_toolchains",
 )
 
 bootcamp_digests = _bootcamp_digests
 bootcamp_library = _bootcamp_library
-bootcamp_toolchain = _bootcamp_toolchain
-bootcamp_register_toolchains = _bootcamp_register_toolchains
+rules_bootcamp_deps = _rules_bootcamp_deps
+rules_bootcamp_toolchains = _rules_bootcamp_toolchains
