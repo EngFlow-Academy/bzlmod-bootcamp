@@ -67,5 +67,6 @@ bootcamp_library = rule(
     implementation = _bootcamp_library_impl,
     attrs = _ATTRS,
     fragments = ["java"],
+    provides = [JavaInfo],
     toolchains = [_TOOLCHAIN_TYPE],
 )
