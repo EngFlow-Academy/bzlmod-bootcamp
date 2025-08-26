@@ -27,12 +27,22 @@ def rules_magic_deps():
         sha256 = "eb5447f019734b0c4284eaa5f8248415084da5445ba8201c935a211ab8af43a0",
     )
 
+    # Uncomment to compile protobuf using Bazel 6.5.0 without the C++17 flags in
+    # .bazelrc-cxxopts.
+    #maybe(
+    #    http_archive,
+    #    name = "com_google_absl",
+    #    sha256 = "91ac87d30cc6d79f9ab974c51874a704de9c2647c40f6932597329a282217ba8",
+    #    strip_prefix = "abseil-cpp-20220623.1",
+    #    url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20220623.1.tar.gz",
+    #)
+
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "75be42bd736f4df6d702a0e4e4d30de9ee40eac024c4b845d17ae4cc831fe4ae",
-        strip_prefix = "protobuf-21.7",
-        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.7.tar.gz",
+        sha256 = "e4ff2aeb767da6f4f52485c2e72468960ddfe5262483879ef6ad552e52757a77",
+        strip_prefix = "protobuf-27.2",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v27.2.tar.gz",
     )
 
     maybe(

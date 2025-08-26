@@ -1,0 +1,70 @@
+# Used by bootcamp/tools/bazel to support newer protobuf + abseil-cpp builds.
+#
+# Bazel 6 needs these flags to compile `protobuf` v22, and Bazel 7 needs them to
+# compile `protobuf` v32, due to their respective `abseil-cpp` versions.
+#
+# Bazel 8 doesn't need these flags, because its C++ toolchains come from
+# `rules_cc`, which already sets these flags.
+#
+# ---
+#
+# protobuf >= v22.0 requires abseil >= 20230125.0, which requires c++14. See:
+#
+# - https://github.com/bazel-contrib/rules_scala/issues/1647
+#
+# The default for Bazel 6 on Unix in general is C++14, but is C++11 on macOS
+# specifically (it seems the pull request missed it):
+#
+# - bazelbuild/bazel#19794: [6.4.0] Bump c++ standard to c++14 per default
+#   bazelbuild/bazel@90f08c4ab6d9feccdc483a34cfc4bebc571c7b6a
+# - https://github.com/bazelbuild/bazel/blob/6.5.0/tools/cpp/bsd_cc_toolchain_config.bzl#L163
+# - https://github.com/bazelbuild/bazel/blob/6.5.0/tools/cpp/osx_cc_configure.bzl#L102
+#   https://github.com/bazelbuild/bazel/blob/6.5.0/tools/cpp/osx_cc_configure.bzl#L72
+# - https://github.com/bazelbuild/bazel/blob/6.5.0/tools/cpp/unix_cc_configure.bzl#L412
+# - https://github.com/bazelbuild/bazel/blob/6.5.0/tools/cpp/windows_cc_toolchain_config.bzl#L1206
+#
+# `protobuf` v32.0 requires a version of `abseil-cpp` that requires at
+# least C++17. The default for Bazel 7 is still C++14.
+#
+# Bazel 7 moved the Apple CC toolchain into `apple_support` 1.4.0, and
+# updated the default from C++11 to C++17 in 1.5.0. However, this doesn't
+# seem to affect macOS builds.
+#
+# - bazelbuild/bazel#16619: Move Apple toolchain setup to apple_support
+#   bazelbuild/bazel@d56dc18e1978102e35fbcf92c5d63f9f9eef37cd
+#   bazelbuild/bazel@699e40373f95e42390a85f29dfa1098636336103
+# - https://github.com/bazelbuild/bazel/blob/7.6.2/tools/cpp/bsd_cc_toolchain_config.bzl#L163
+# - https://github.com/bazelbuild/bazel/blob/7.6.2/tools/cpp/unix_cc_configure.bzl#L438
+# - https://github.com/bazelbuild/bazel/blob/7.6.2/tools/cpp/windows_cc_toolchain_config.bzl#L1239
+#
+# - bazelbuild/apple_support#113: Add Apple CC toolchain setup
+#   bazelbuild/apple_support@311cc836de756eceece623267837162c9ca4a6f5
+#   https://github.com/bazelbuild/apple_support/blob/1.4.0/crosstool/osx_cc_configure.bzl#L61
+#   https://github.com/bazelbuild/apple_support/blob/1.4.0/crosstool/osx_cc_configure.bzl#L91
+# - bazelbuild/apple_support#213: Add proper support for custom Swift
+#   toolchains
+#   bazelbuild/apple_support@697a39795374bfe88e98e5b0034e1f201371fb59
+#   https://github.com/bazelbuild/apple_support/blob/1.5.0/crosstool/osx_cc_configure.bzl#L60
+#
+# Bazel 8 moved the C++ toolchains into `rules_cc`, which now sets the
+# default C++ version.
+#
+# - bazelbuild/bazel#23809: Move cc toolchains from tools/cpp to rules_cc
+# - bazelbuild/bazel#23891: Move cc toolchains to rules_cc
+#   bazelbuild/bazel@1c4e78a9ceab9794140324d64833c628e382a3da
+#
+# `rules_cc` has set `-std=c++17` since 0.0.11.
+#
+# - bazelbuild/rules_cc#247: Sync cc toolchain from Bazel's tools/cpp
+#   bazelbuild/rules_cc@c2549f6eb07ce00e529b84f9b9f1b31135a9ff77
+# - https://github.com/bazelbuild/rules_cc/blob/0.0.11/cc/private/toolchain/unix_cc_configure.bzl#L472
+# - https://github.com/bazelbuild/rules_cc/blob/0.2.9/cc/private/toolchain/unix_cc_configure.bzl#L472
+
+common --enable_platform_specific_config
+
+common:linux --cxxopt=-std=c++17
+common:linux --host_cxxopt=-std=c++17
+common:macos --cxxopt=-std=c++17
+common:macos --host_cxxopt=-std=c++17
+common:windows --cxxopt=/std=c++17
+common:windows --host_cxxopt=/std=c++17
