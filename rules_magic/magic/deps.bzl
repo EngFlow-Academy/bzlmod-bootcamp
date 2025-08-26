@@ -75,3 +75,13 @@ def rules_magic_deps():
         strip_prefix = "rules_python-1.0.0",
         url = "https://github.com/bazelbuild/rules_python/releases/download/1.0.0/rules_python-1.0.0.tar.gz",
     )
+
+    maybe(
+        http_archive,
+        name = "bazel_worker_api",
+        sha256 = "5aac6ae6a23015cc7984492a114dc539effc244ec5ac7f8f6b1539c15fb376eb",
+        urls = [
+            "https://github.com/bazelbuild/bazel-worker-api/releases/download/v0.0.6/bazel-worker-api-v0.0.6.tar.gz",
+        ],
+        strip_prefix = "bazel-worker-api-0.0.6/proto",
+    )
