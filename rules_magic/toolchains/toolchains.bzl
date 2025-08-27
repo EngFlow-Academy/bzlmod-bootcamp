@@ -1,7 +1,7 @@
 """https://bazel.build/extending/toolchains"""
 
 load(":providers.bzl", "MagicInfo")
-load(":repositories.bzl", "KNOWN_GAMES")
+load(":repositories.bzl", "KNOWN_GAMES", "rules_magic_spells_repositories")
 load(
     "@rules_magic_config//:config.bzl",
     "ENABLE_SOME_FEATURE",
@@ -62,3 +62,8 @@ def setup_magic_toolchain(
         toolchain = ":" + name + "_impl",
         toolchain_type = "//toolchains:toolchain_type",
     )
+
+def rules_magic_toolchains():
+    """Legacy WORKSPACE only."""
+    rules_magic_spells_repositories()
+    native.register_toolchains("//toolchains:all")

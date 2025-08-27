@@ -5,14 +5,12 @@ local_repository(
     path = "../rules_magic"
 )
 
-load(
-    "@rules_magic//magic:magic.bzl",
-    "rules_magic_deps",
-    "rules_magic_leaflet_repo",
-    "rules_magic_toolchains",
-)
+load("@rules_magic//magic:deps.bzl", "rules_magic_deps")
 
 rules_magic_deps()
+
+load("@rules_magic//magic:leaflet_repo.bzl", "rules_magic_leaflet_repo")
+
 rules_magic_leaflet_repo()
 
 load("@bazel_features//:deps.bzl", "bazel_features_deps")
@@ -62,5 +60,7 @@ magic_config(
     versions = ["1.2.3", "4.5.6", "7.8.9"],
     games = ["enchanter", "sorcerer", "spellbreaker"],
 )
+
+load("@rules_magic//toolchains:toolchains.bzl", "rules_magic_toolchains")
 
 rules_magic_toolchains()

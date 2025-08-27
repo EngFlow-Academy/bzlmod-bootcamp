@@ -1,6 +1,6 @@
 workspace(name = "rules_magic")
 
-load("//magic:magic.bzl", "rules_magic_deps", "rules_magic_toolchains")
+load("//magic:deps.bzl", "rules_magic_deps")
 
 rules_magic_deps()
 
@@ -50,5 +50,7 @@ load("//magic:config.bzl", "magic_config")
 magic_config(
     versions = ["1.2.3", "4.5.6", "7.8.9"],
 )
+
+load("//toolchains:toolchains.bzl", "rules_magic_toolchains")
 
 rules_magic_toolchains()
