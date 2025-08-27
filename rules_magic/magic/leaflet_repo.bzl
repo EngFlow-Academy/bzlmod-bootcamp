@@ -12,14 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Module extension to generate the @rules_magic_leaflet_repo repo."""
+"""Legacy WORKSPACE macro for instantiating @rules_magic_leaflet."""
 
-load("//magic:leaflet_repo.bzl", "rules_magic_leaflet_repository")
-
-def _magic_leaflet_impl(mctx):
-    rules_magic_leaflet_repository()
-    return mctx.extension_metadata(reproducible = True)
-
-magic_leaflet = module_extension(
-    implementation = _magic_leaflet_impl,
+load(
+    "//magic:private/magic_leaflet_repository.bzl",
+    _magic_leaflet_repository = "magic_leaflet_repository",
 )
+
+def rules_magic_leaflet_repository(name = "rules_magic_leaflet"):
+    """Instantiates the @rules_magic_leaflet repository.
+
+    For legacy WORKSPACE builds only. For Bzlmod, use
+    //magic/extensions:leaflet_repo.bzl.
+
+    Args:
+        name: the name of the magic leaflet repository
+    """
+    _magic_leaflet_repository(name = name)
