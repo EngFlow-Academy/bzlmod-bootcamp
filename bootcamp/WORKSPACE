@@ -34,12 +34,7 @@ magic_config(
     ],
 )
 
-load(
-    "@rules_magic//magic:magic.bzl",
-    "rules_magic_deps",
-    "rules_magic_leaflet_repository",
-    "rules_magic_toolchains",
-)
+load("@rules_magic//magic:deps.bzl", "rules_magic_deps")
 
 rules_magic_deps()
 
@@ -78,6 +73,10 @@ load("@rules_python//python:repositories.bzl", "py_repositories")
 
 py_repositories()
 
+load("@rules_magic//magic:leaflet_repo.bzl", "rules_magic_leaflet_repository")
+
 rules_magic_leaflet_repository()
+
+load("@rules_magic//magic:toolchains.bzl", "rules_magic_toolchains")
 
 rules_magic_toolchains()
