@@ -12,14 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Module extension to generate the @rules_magic_leaflet_repo repo."""
+"""Toolchain macros."""
 
-load("//magic:leaflet_repo.bzl", "rules_magic_leaflet_repository")
-
-def _magic_leaflet_impl(mctx):
-    rules_magic_leaflet_repository()
-    return mctx.extension_metadata(reproducible = True)
-
-magic_leaflet = module_extension(
-    implementation = _magic_leaflet_impl,
+load(
+    ":private/setup_magic_spells_repositories.bzl",
+    "setup_magic_spells_repositories",
 )
+
+def rules_magic_toolchains(name = None):
+    """Instantiates toolchain dependencies and registers builtin toolchains.
+
+    For legacy WORKSPACE builds only. For Bzlmod, use
+    //magic/extensions:toolchains.bzl.
+
+    Args:
+        name: unused; defined to satisfy buildifier
+    """
+    setup_magic_spells_repositories(name = name)
+    native.register_toolchains("//magic:all")
