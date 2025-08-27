@@ -3,7 +3,7 @@
 _ATTRS = {
     "version": attr.string(),
     "java_compile_toolchain": attr.label(
-        default = "@bazel_tools//tools/jdk:toolchain_jdk_17",
+        default = "@rules_java//toolchains:toolchain_jdk_17",
         providers = [java_common.JavaToolchainInfo],
     ),
     "_template": attr.label(
