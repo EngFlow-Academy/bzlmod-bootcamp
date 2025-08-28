@@ -1,0 +1,40 @@
+"""rules_magic module configuration"""
+
+module(name = "rules_magic")
+
+bazel_dep(name = "rules_java", version = "8.6.0")
+bazel_dep(name = "rules_proto", version = "7.0.0")
+
+# If you have dependencies that require it, add:
+#   repo_name = "com_google_protobuf")
+bazel_dep(name = "protobuf", version = "29.0")
+
+config = use_extension(
+    "//magic/extensions:config.bzl",
+    "magic_config",
+)
+use_repo(config, "rules_magic_config")
+
+dev_config = use_extension(
+    "//magic/extensions:config.bzl",
+    "magic_config",
+    dev_dependency = True,
+)
+dev_config.settings(
+    version = "7.8.9",
+    versions = ["1.2.3", "4.5.6", "7.8.9", "10.11.12", "13.14.15"],
+)
+
+magic_toolchains = use_extension(
+    "//magic/extensions:toolchains.bzl",
+    "magic_toolchains",
+)
+
+use_repo(
+    magic_toolchains,
+    "rules_magic_spells_enchanter",
+    "rules_magic_spells_sorcerer",
+    "rules_magic_spells_spellbreaker",
+)
+
+register_toolchains("//toolchains:all")
