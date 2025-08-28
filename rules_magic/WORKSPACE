@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-workspace(name = "com_frobozz_rules_magic")
+workspace(name = "rules_magic")
 
-load("@com_frobozz_rules_magic//magic:config.bzl", "magic_config")
+load("//magic:config.bzl", "magic_config")
 
 magic_config(
     versions = [
@@ -24,11 +24,7 @@ magic_config(
     ],
 )
 
-load(
-    "@com_frobozz_rules_magic//magic:magic.bzl",
-    "rules_magic_deps",
-    "rules_magic_toolchains",
-)
+load("//magic:magic.bzl", "rules_magic_deps", "rules_magic_toolchains")
 
 rules_magic_deps()
 
