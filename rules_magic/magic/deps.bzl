@@ -6,6 +6,16 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 def rules_magic_deps():
     maybe(
         http_archive,
+        name = "bazel_skylib",
+        sha256 = "d00f1389ee20b60018e92644e0948e16e350a7707219e7a390fb0a99b6ec9262",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.7.0/bazel-skylib-1.7.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.7.0/bazel-skylib-1.7.0.tar.gz",
+        ],
+    )
+
+    maybe(
+        http_archive,
         name = "rules_cc",
         urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.14/rules_cc-0.0.14.tar.gz"],
         sha256 = "906e89286acc67c20819c3c88b3283de0d5868afda33635d70acae0de9777bb7",
@@ -53,9 +63,9 @@ def rules_magic_deps():
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "13e7749c30bc24af6ee93e092422f9dc08491c7097efa69461f88eb5f61805ce",
-        strip_prefix = "protobuf-28.0",
-        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v28.0.tar.gz",
+        sha256 = "10a0d58f39a1a909e95e00e8ba0b5b1dc64d02997f741151953a2b3659f6e78c",
+        strip_prefix = "protobuf-29.0",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v29.0.tar.gz",
     )
 
     maybe(
