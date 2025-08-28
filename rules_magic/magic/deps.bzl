@@ -8,9 +8,9 @@ def rules_magic_deps():
         http_archive,
         name = "rules_java",
         urls = [
-            "https://github.com/bazelbuild/rules_java/releases/download/6.5.2/rules_java-6.5.2.tar.gz",
+            "https://github.com/bazelbuild/rules_java/releases/download/7.9.1/rules_java-7.9.1.tar.gz",
         ],
-        sha256 = "16bc94b1a3c64f2c36ceecddc9e09a643e80937076b97e934b96a8f715ed1eaa",
+        sha256 = "e1df5fec7d4dde1f8b0a79d3622b3351552d4c05c9ea1671165351a58493a2c6",
     )
 
     maybe(
