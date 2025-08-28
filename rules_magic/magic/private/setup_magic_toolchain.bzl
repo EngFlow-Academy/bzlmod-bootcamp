@@ -15,19 +15,13 @@
 """Macro for setting up a rules_magic toolchain."""
 
 load(
-    "@com_frobozz_rules_magic//magic:magic_toolchain.bzl",
-    "magic_toolchain",
-)
-load(
-    "@com_frobozz_rules_magic//magic:private/setup_magic_spells_repositories.bzl",
-    "BUILTIN_GAMES",
-)
-load(
-    "@com_frobozz_rules_magic_config//:config.bzl",
+    "@rules_magic_config//:config.bzl",
     "ENABLE_SOME_FEATURE",
     "GAME",
     "MAGIC_VERSION",
 )
+load(":magic_toolchain.bzl", "magic_toolchain")
+load(":private/setup_magic_spells_repositories.bzl", "BUILTIN_GAMES")
 
 def setup_magic_toolchain(
         name,
@@ -49,5 +43,5 @@ def setup_magic_toolchain(
     native.toolchain(
         name = name,
         toolchain = ":" + name + "_impl",
-        toolchain_type = "@com_frobozz_rules_magic//magic:toolchain_type",
+        toolchain_type = ":toolchain_type",
     )

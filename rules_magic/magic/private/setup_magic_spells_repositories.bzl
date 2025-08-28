@@ -14,10 +14,7 @@
 
 """Macro for instantiating builtin toolchain dependency repos."""
 
-load(
-    "@com_frobozz_rules_magic//magic:magic_spells_repository.bzl",
-    "magic_spells_repository",
-)
+load(":magic_spells_repository.bzl", "magic_spells_repository")
 
 BUILTIN_GAMES = ["enchanter", "sorcerer", "spellbreaker"]
 
@@ -31,15 +28,13 @@ def setup_magic_spells_repositories(name = None):
         name: unused; defined to satisfy buildifier
     """
     for game in BUILTIN_GAMES:
-        repo_name = "com_frobozz_rules_magic_spells_" + game
+        repo_name = "rules_magic_spells_" + game
 
         # Typically a dependency macro will contain a series of `http_archive`
         # calls. We use a custom repo rule to keep the example self-contained.
         magic_spells_repository(
             name = repo_name,
-            spells_json = (
-                "@com_frobozz_rules_magic//magic:private/spells/%s.json" % game
-            ),
+            spells_json = Label("//magic:private/spells/%s.json" % game),
         )
 
         native.bind(

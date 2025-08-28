@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Defines the repository rule for @com_frobozz_rules_magic_leaflet."""
+"""Defines the repository rule for @rules_magic_leaflet."""
 
 _LEAFLET_CONTENT = """\
 In the interest of avoiding a potential copyright violation, please search for

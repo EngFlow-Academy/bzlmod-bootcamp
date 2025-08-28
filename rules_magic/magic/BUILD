@@ -12,15 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load(
-    "@com_frobozz_rules_magic//magic:magic.bzl",
-    "magic_library",
-    "setup_magic_toolchain",
-)
-load(
-    "@com_frobozz_rules_magic//magic:private/setup_magic_spells_repositories.bzl",
-    "BUILTIN_GAMES",
-)
+load(":magic.bzl", "magic_library", "setup_magic_toolchain")
+load(":private/setup_magic_spells_repositories.bzl", "BUILTIN_GAMES")
 
 exports_files(
     [
