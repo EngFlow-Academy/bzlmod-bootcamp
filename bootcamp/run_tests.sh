@@ -41,7 +41,7 @@ usage() {
   printf '%s\n' \
     "Usage: ${script_file} [-h | --help] [-v | --verbose] [-k | --keep-going]" \
     "       ${padding} [-f | --file <file>] [-b | --bazel <version>]" \
-    "       ${padding} [<test case>]" \
+    "       ${padding} [--legacy] [<test case>]" \
     '' \
     'Where:' \
     '  -h, --help             show this usage message and exit' \
@@ -49,6 +49,7 @@ usage() {
     '  -k, --keep-going       keep running tests even after a test fails' \
     '  -f, --file <file>      run tests from the specified file' \
     '  -b, --bazel <version>  use a specific Bazel version (via Bazelisk)' \
+    '  --legacy               build in legacy WORKSPACE mode (Bazel >= 7)' \
     '  <test case>            run a single test case, showing all output' \
     >&${out_fd}
 
@@ -89,6 +90,10 @@ while [[ "$#" -ne 0 ]]; do
     export USE_BAZEL_VERSION="$2"
     shift 2
     ;;
+  --legacy)
+    export USE_LEGACY_WORKSPACE='true'
+    shift
+    ;;
   -*)
     error "unknown flag (run with -h for help): ${1}"
     ;;
@@ -98,7 +103,7 @@ while [[ "$#" -ne 0 ]]; do
     fi
     export RULES_MAGIC_TEST_ONLY="$1"
     shift
-   esac
+  esac
 done
 
 . "../rules_magic/test/test_framework.sh"
