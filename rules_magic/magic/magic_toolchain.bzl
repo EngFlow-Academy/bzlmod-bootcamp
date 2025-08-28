@@ -17,15 +17,15 @@
 See: https://bazel.build/extending/toolchains
 """
 
-load("@com_frobozz_rules_magic//magic:magic_info.bzl", "MagicInfo")
 load(
-    "@com_frobozz_rules_magic_config//:config.bzl",
+    "@rules_magic_config//:config.bzl",
     "ENABLE_SOME_FEATURE",
     "GAME",
     "GAMES",
     "MAGIC_VERSION",
     "MAGIC_VERSIONS",
 )
+load(":magic_info.bzl", "MagicInfo")
 
 _ATTRS = {
     "game": attr.string(default = GAME),

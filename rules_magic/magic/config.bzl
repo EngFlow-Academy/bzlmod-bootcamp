@@ -17,7 +17,7 @@
 # Modeled after:
 # - https://github.com/bazel-contrib/rules_scala/blob/v7.1.4/scala_config.bzl
 
-"""Generates the @com_frobozz_rules_magic_config repo."""
+"""Generates the @rules_magic_config repo."""
 
 DEFAULT_MAGIC_VERSION = "1.2.3"
 DEFAULT_GAME = "enchanter"
@@ -200,7 +200,7 @@ def magic_config(
         games = [],
         enable_some_feature = False):
     _config_repository(
-        name = "com_frobozz_rules_magic_config",
+        name = "rules_magic_config",
         version = version,
         versions = versions,
         game = game,

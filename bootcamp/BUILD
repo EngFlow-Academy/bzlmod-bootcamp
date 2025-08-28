@@ -33,10 +33,10 @@ magic_binary(
 
 genrule(
     name = "expansions",
-    srcs = ["@com_frobozz_rules_magic_leaflet"],
+    srcs = ["@rules_magic_leaflet"],
     outs = ["expansions.txt"],
     cmd = "\n".join([
-        "echo {f}: $({f} @com_frobozz_rules_magic_leaflet) >>$@".format(f = f)
+        "echo {f}: $({f} @rules_magic_leaflet) >>$@".format(f = f)
         for f in [
             "execpath",
             "rootpath",
@@ -51,12 +51,12 @@ magic_digests(
         ":default-values",
         ":expansions",
         ":hello.txt",
-        "@com_frobozz_rules_magic_leaflet",
+        "@rules_magic_leaflet",
     ],
 )
 
 magic_test(
     name = "example_test",
     srcs = ["test.sh"],
-    data = ["@com_frobozz_rules_magic_leaflet"],
+    data = ["@rules_magic_leaflet"],
 )

@@ -26,7 +26,7 @@ _ATTRS = {
     ),
 }
 
-_TOOLCHAIN_TYPE = "@com_frobozz_rules_magic//magic:toolchain_type"
+_TOOLCHAIN_TYPE = ":toolchain_type"
 
 def _magic_library_impl(ctx):
     info = ctx.toolchains[_TOOLCHAIN_TYPE].magic_info
