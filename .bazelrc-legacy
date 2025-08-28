@@ -1,0 +1,2 @@
+# Force legacy `WORKSPACE` builds.
+common --noenable_bzlmod --enable_workspace
