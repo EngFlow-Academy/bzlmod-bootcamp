@@ -1,9 +1,9 @@
 """https://bazel.build/extending/toolchains"""
 
-load("@com_frobozz_rules_magic//toolchains:providers.bzl", "MagicInfo")
-load("@com_frobozz_rules_magic//toolchains:repositories.bzl", "KNOWN_GAMES")
+load(":providers.bzl", "MagicInfo")
+load(":repositories.bzl", "KNOWN_GAMES")
 load(
-    "@com_frobozz_rules_magic_config//:config.bzl",
+    "@rules_magic_config//:config.bzl",
     "ENABLE_SOME_FEATURE",
     "GAME",
     "GAMES",
@@ -60,5 +60,5 @@ def setup_magic_toolchain(
     native.toolchain(
         name = name,
         toolchain = ":" + name + "_impl",
-        toolchain_type = "@com_frobozz_rules_magic//toolchains:toolchain_type",
+        toolchain_type = "//toolchains:toolchain_type",
     )

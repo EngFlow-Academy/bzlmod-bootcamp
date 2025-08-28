@@ -1,4 +1,4 @@
-"""Generates the @com_frobozz_rules_magic_config repo.
+"""Generates the @rules_magic_config repo.
 
 Modeled after @rules_scala//scala_config.bzl.
 """
@@ -161,7 +161,7 @@ def magic_config(
         games = [],
         enable_some_feature = False):
     _config_repository(
-        name = "com_frobozz_rules_magic_config",
+        name = "rules_magic_config",
         magic_version = version,
         magic_versions = versions,
         game = game,

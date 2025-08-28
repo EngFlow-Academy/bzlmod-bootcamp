@@ -1,10 +1,6 @@
-workspace(name = "com_frobozz_rules_magic")
+workspace(name = "rules_magic")
 
-load(
-    "@com_frobozz_rules_magic//magic:magic.bzl",
-    "rules_magic_deps",
-    "rules_magic_toolchains",
-)
+load("//magic:magic.bzl", "rules_magic_deps", "rules_magic_toolchains")
 
 rules_magic_deps()
 
@@ -49,7 +45,7 @@ load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
 
-load("@com_frobozz_rules_magic//magic:config.bzl", "magic_config")
+load("//magic:config.bzl", "magic_config")
 
 magic_config(
     versions = ["1.2.3", "4.5.6", "7.8.9"],

@@ -1,4 +1,4 @@
-load("@com_frobozz_rules_magic//magic:magic.bzl", "magic_library")
+load("//magic:magic.bzl", "magic_library")
 
 exports_files(
     [

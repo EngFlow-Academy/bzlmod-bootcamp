@@ -1,9 +1,6 @@
 """Toolchain definitions"""
-load("@com_frobozz_rules_magic//toolchains:repositories.bzl", "KNOWN_GAMES")
-load(
-    "@com_frobozz_rules_magic//toolchains:toolchains.bzl",
-    "setup_magic_toolchain",
-)
+load(":repositories.bzl", "KNOWN_GAMES")
+load(":toolchains.bzl", "setup_magic_toolchain")
 
 package(default_visibility = ["//visibility:public"])
 
