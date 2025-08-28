@@ -17,7 +17,8 @@
 # ---
 #
 # Wraps `bazelisk` to use a different `.bazelrc` for Bazel 6 and to use a custom
-# Bazel 6 binary via `BAZEL_6_BINARY`.
+# Bazel 6 binary via `BAZEL_6_BINARY`. Also supports `USE_LEGACY_WORKSPACE` for
+# Bazel >= 7 to build in legacy `WORKSPACE` mode without updating `.bazelrc`.
 #
 # If necessary, build a custom Bazel 6.5.0 binary for macOS 26 Tahoe:
 # - https://github.com/bazelbuild/bazel/issues/27026#issuecomment-3310370835
@@ -49,6 +50,9 @@ if [[ "${USE_BAZEL_VERSION:-}" =~ ^6\. ]]; then
   # --noenable_bzlmod is the default, and --enable_workspace doesn't exist, so
   # we avoid reading the .bazelrc file.
   bazel+=('--bazelrc=../.bazelrc-cxxopts' '--noworkspace_rc')
+
+elif [[ -n "${USE_LEGACY_WORKSPACE:-}" ]]; then
+  bazel+=('--bazelrc=../.bazelrc-legacy')
 fi
 
 exec "${bazel[@]}" "$@"
