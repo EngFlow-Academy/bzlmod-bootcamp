@@ -32,17 +32,15 @@ py_repositories()
 # - https://github.com/bazelbuild/rules_java/releases/tag/8.9.0
 #
 # `rules_java` 7.x also works with this ordering.
-load(
-    "@rules_java//java:repositories.bzl",
-    "rules_java_dependencies",
-    "rules_java_toolchains",
-)
+load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 
 rules_java_dependencies()
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
+
+load("@rules_java//java:repositories.bzl", "rules_java_toolchains")
 
 rules_java_toolchains()
 
