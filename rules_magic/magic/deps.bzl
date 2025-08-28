@@ -6,6 +6,14 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 def rules_magic_deps():
     maybe(
         http_archive,
+        name = "rules_cc",
+        urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.14/rules_cc-0.0.14.tar.gz"],
+        sha256 = "906e89286acc67c20819c3c88b3283de0d5868afda33635d70acae0de9777bb7",
+        strip_prefix = "rules_cc-0.0.14",
+    )
+
+    maybe(
+        http_archive,
         name = "rules_java",
         urls = [
             "https://github.com/bazelbuild/rules_java/releases/download/8.6.0/rules_java-8.6.0.tar.gz",
