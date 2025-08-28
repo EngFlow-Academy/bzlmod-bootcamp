@@ -16,9 +16,21 @@ def rules_magic_deps():
     maybe(
         http_archive,
         name = "rules_proto",
-        sha256 = "6fb6767d1bef535310547e03247f7518b03487740c11b6c6adb7952033fe1295",
-        strip_prefix = "rules_proto-6.0.2",
-        url = "https://github.com/bazelbuild/rules_proto/releases/download/6.0.2/rules_proto-6.0.2.tar.gz",
+        sha256 = "8e195dbb6a505ca4c7aafa6b7cffa47fe49a261b27a342053cfb2b973cc4aa12",
+        strip_prefix = "rules_proto-7.0.0",
+        url = "https://github.com/bazelbuild/rules_proto/releases/download/7.0.0/rules_proto-7.0.0.tar.gz",
+    )
+
+    # rules_proto 6.x included this in its deps, but rules_proto 7.x does not.
+    # protobuf v29.0 depends on it, but only protobuf >= v30.0 includes it.
+    # So we include it for now, but can remove it once protobuf v30.x becomes
+    # the minimum supported version.
+    maybe(
+        http_archive,
+        name = "bazel_features",
+        sha256 = "95fb3cfd11466b4cad6565e3647a76f89886d875556a4b827c021525cb2482bb",
+        strip_prefix = "bazel_features-1.10.0",
+        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.10.0/bazel_features-v1.10.0.tar.gz",
     )
 
     # Needed by Bazel 6.5.0 to compile protobuf without C++14 flags in .bazelrc.
