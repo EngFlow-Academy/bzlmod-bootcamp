@@ -1,5 +1,7 @@
 """magic_library implementation"""
 
+load("@rules_java//java/common:java_common.bzl", "java_common")
+
 _ATTRS = {
     "version": attr.string(),
     "java_compile_toolchain": attr.label(
