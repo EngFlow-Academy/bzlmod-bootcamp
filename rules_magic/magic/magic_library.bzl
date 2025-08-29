@@ -14,6 +14,8 @@
 
 """magic_library implementation"""
 
+load("@rules_java//java/common:java_info.bzl", "JavaInfo")
+
 _ATTRS = {
     "java_compile_toolchain": attr.label(
         default = "@rules_java//toolchains:toolchain_jdk_17",

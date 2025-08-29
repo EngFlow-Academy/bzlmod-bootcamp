@@ -27,9 +27,9 @@ BUILDIFIER_URL_ROOT='https://github.com/bazelbuild/buildtools/blob/v8.2.1'
 MODE='warn'
 PATHS=('.')
 
-# Suppress the `native-java-*` warnings because we'll fix the related issues
-# later in the `bazel-9 branch`.
-WARNINGS='+unsorted-dict-items,-native-java-common,-native-java-info'
+# Suppress the `native-java-common` warning because we'll fix it in the next
+# commit.
+WARNINGS='+unsorted-dict-items,-native-java-common'
 
 usage() {
   local exit_code="$1"
