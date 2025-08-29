@@ -26,10 +26,7 @@ cd '..'
 BUILDIFIER_URL_ROOT='https://github.com/bazelbuild/buildtools/blob/v8.2.1'
 MODE='warn'
 PATHS=('.')
-
-# Suppress the `native-java-common` warning because we'll fix it in the next
-# commit.
-WARNINGS='+unsorted-dict-items,-native-java-common'
+WARNINGS='+unsorted-dict-items'
 
 usage() {
   local exit_code="$1"
