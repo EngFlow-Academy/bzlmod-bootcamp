@@ -16,8 +16,16 @@ magic_test = _magic_test
 rules_magic_deps = _rules_magic_deps
 rules_magic_spells_repositories = _rules_magic_spells_repositories
 
-def rules_magic_leaflet_repo():
-    _magic_leaflet_repo(name = "rules_magic_leaflet")
+# Replace with an assignment from _magic_leaflet_repo once all supported
+# Bazels have repository_ctx.original_name.
+def rules_magic_leaflet_repo(**kwargs):
+    name = kwargs.pop("name", "rules_magic_leaflet")
+
+    _magic_leaflet_repo(
+        name = name,
+        default_target_name = kwargs.pop("default_target_name", name),
+        **kwargs
+    )
 
 def rules_magic_toolchains():
     _rules_magic_spells_repositories()
