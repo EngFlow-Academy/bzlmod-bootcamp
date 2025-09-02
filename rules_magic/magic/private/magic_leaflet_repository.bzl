@@ -38,16 +38,32 @@ magic_leaflet(
 _RULES_MAGIC_REPO = Label("//:all").repo_name
 
 def _magic_leaflet_repository_impl(rctx):
+    # Replace with `rctx.original_name` once all supported Bazels have it.
+    repo_name = getattr(rctx, "original_name", rctx.attr.default_target_name)
+
     rctx.file("leaflet.txt", _LEAFLET_CONTENT, executable = False)
     rctx.file(
         "BUILD",
         _BUILD_CONTENT.format(
             rules_magic_repo = _RULES_MAGIC_REPO,
-            leaflet_name = rctx.name,
+            leaflet_name = repo_name,
         ),
         executable = False,
     )
 
-magic_leaflet_repository = repository_rule(
+_magic_leaflet_repository = repository_rule(
     implementation = _magic_leaflet_repository_impl,
+    attrs = {
+        # Remove once all supported Bazels have `repository_ctx.original_name`.
+        "default_target_name": attr.string(mandatory = True),
+    },
 )
+
+# Restore the unwrapped `magic_leaflet_repo` rule once all supported
+# Bazels have `repository_ctx.original_name`.
+def magic_leaflet_repository(name, **kwargs):
+    _magic_leaflet_repository(
+        name = name,
+        default_target_name = name,
+        **kwargs
+    )
