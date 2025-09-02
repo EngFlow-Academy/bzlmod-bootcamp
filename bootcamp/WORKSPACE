@@ -22,10 +22,12 @@ local_repository(
 load(
     "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl",
     "rules_bootcamp_deps",
+    "rules_bootcamp_leaflet_repo",
     "rules_bootcamp_toolchains",
 )
 
 rules_bootcamp_deps()
+rules_bootcamp_leaflet_repo()
 
 load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
 
