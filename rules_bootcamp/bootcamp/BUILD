@@ -5,7 +5,10 @@ load(
 )
 
 exports_files(
-    ["private/bootcamp.java.template"],
+    [
+        "private/bootcamp.java.template",
+        "private/test.sh.template",
+    ],
     visibility = [":__pkg__"],
 )
 

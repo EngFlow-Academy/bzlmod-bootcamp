@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Inspired by rules_scala's test/shell/test_runner.sh
+
+SRC_PATHS=(
+  {{src_paths}}
+)
+DATA_FILES=(
+  {{data_files}}
+)
+
+. "{{test_framework_path}}"
+run_test_files "${SRC_PATHS[@]}"
