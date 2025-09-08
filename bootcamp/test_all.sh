@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+#
 # Copyright 2025 EngFlow, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,34 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load(
-    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_toolchain.bzl",
-    "bootcamp_toolchain",
-)
+set -euo pipefail
 
-exports_files(
-    [
-        "private/bootcamp.java.template",
-        "private/test.sh.template",
-    ],
-    visibility = [":__pkg__"],
-)
+project_dir="${BASH_SOURCE[0]%/*}"
+if [[ "$project_dir" != "${BASH_SOURCE[0]}" ]]; then
+  cd "$project_dir"
+fi
 
-toolchain_type(
-    name = "toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
-bootcamp_toolchain(
-    name = "default_settings",
-)
-
-toolchain(
-    name = "default_settings_toolchain",
-    toolchain = ":default_settings",
-    toolchain_type = ":toolchain_type",
-)
-
-bootcamp_library(
-    name = "default-values",
-)
+. "../rules_magic/test/test_framework.sh"
+run_test_files ./test/*.sh

@@ -22,16 +22,25 @@ https://web.mit.edu/marleigh/www/portfolio/Files/zork/transcript.html
 """
 
 _BUILD_CONTENT = """\
-alias(
-    name = "%s",
-    actual = "leaflet.txt",
+load(
+    "@io_frobozzco_rules_bootcamp//bootcamp:private/bootcamp_leaflet.bzl",
+    "bootcamp_leaflet",
+)
+
+bootcamp_leaflet(
+    name = "{leaflet_name}",
+    text = "leaflet.txt",
     visibility = ["//visibility:public"],
 )
 """
 
 def _bootcamp_leaflet_repo_impl(rctx):
     rctx.file("leaflet.txt", _LEAFLET_CONTENT, executable = False)
-    rctx.file("BUILD", _BUILD_CONTENT % rctx.name, executable = False)
+    rctx.file(
+        "BUILD",
+        _BUILD_CONTENT.format(leaflet_name = rctx.name),
+        executable = False,
+    )
 
 bootcamp_leaflet_repo = repository_rule(
     implementation = _bootcamp_leaflet_repo_impl,

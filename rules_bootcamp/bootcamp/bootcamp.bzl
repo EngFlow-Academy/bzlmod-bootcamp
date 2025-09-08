@@ -23,6 +23,10 @@ load(
     _bootcamp_library = "bootcamp_library",
 )
 load(
+    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_test.bzl",
+    _bootcamp_test = "bootcamp_test",
+)
+load(
     "@io_frobozzco_rules_bootcamp//bootcamp:deps.bzl",
     _rules_bootcamp_deps = "rules_bootcamp_deps",
 )
@@ -36,6 +40,7 @@ load(
 )
 bootcamp_digests = _bootcamp_digests
 bootcamp_library = _bootcamp_library
+bootcamp_test = _bootcamp_test
 rules_bootcamp_deps = _rules_bootcamp_deps
 rules_bootcamp_toolchains = _rules_bootcamp_toolchains
 

@@ -12,34 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load(
-    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_toolchain.bzl",
-    "bootcamp_toolchain",
-)
+test_leaflet_exists() {
+  local leaflet_path="${DATA_FILES[0]}"
 
-exports_files(
-    [
-        "private/bootcamp.java.template",
-        "private/test.sh.template",
-    ],
-    visibility = [":__pkg__"],
-)
+  if [[ -z "$leaflet_path" ]]; then
+    echo "No leaflet_path specified."
+    exit 1
+  elif [[ ! -f "$leaflet_path" ]]; then
+    echo "leaflet_path does not exist: ${leaflet_path}"
+    exit 1
+  fi
 
-toolchain_type(
-    name = "toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
-bootcamp_toolchain(
-    name = "default_settings",
-)
-
-toolchain(
-    name = "default_settings_toolchain",
-    toolchain = ":default_settings",
-    toolchain_type = ":toolchain_type",
-)
-
-bootcamp_library(
-    name = "default-values",
-)
+  printf 'Contents of "%s":\n---\n%s\n---\n' \
+    "${leaflet_path}" "$(< ${leaflet_path})"
+}
