@@ -35,9 +35,7 @@ def expand_vars(ctx, attr_name, value, targets, additional_vars):
 
 def run_environment_info(ctx):
     """Create a RunEnvironmentInfo provider from `ctx.attr.env` values"""
-
-    # Replace `[]` with `getattr(ctx.attr, "data", [])` later in the workshop.
-    targets = []
+    targets = getattr(ctx.attr, "data", [])
 
     return RunEnvironmentInfo(
         environment = {
@@ -55,10 +53,6 @@ def _magic_test_impl(ctx):
         is_executable = True,
         output = executable,
         substitutions = {
-            "{{data_files}}": "\n".join([
-                "\"%s\"" % ctx.expand_location(d)
-                for d in ctx.attr.data
-            ]),
             "{{src_paths}}": "\n".join(
                 ["\"%s\"" % f.path for f in ctx.files.srcs],
             ),
@@ -66,8 +60,12 @@ def _magic_test_impl(ctx):
         },
     )
 
-    dep_attrs = ctx.attr.srcs + ctx.attr.deps
-    runfiles_files = ctx.files.srcs + [ctx.file._test_framework]
+    dep_attrs = ctx.attr.srcs + ctx.attr.deps + ctx.attr.data + [
+        ctx.attr._runfiles_lib,
+    ]
+    runfiles_files = ctx.files.srcs + ctx.files.data + [
+        ctx.file._test_framework,
+    ]
     runfiles = ctx.runfiles(files = runfiles_files).merge_all([
         target[DefaultInfo].default_runfiles
         for target in dep_attrs
@@ -83,15 +81,18 @@ def _magic_test_impl(ctx):
 
 magic_test = rule(
     implementation = _magic_test_impl,
-    doc = "A glorified sh_test",
+    doc = "A glorified sh_test with the runfiles prefix included",
     # See https://bazel.build/extending/rules#test_rules for implicit
     # dependencies used by Bazel to generate coverage reports.
     attrs = {
-        "data": attr.string_list(),
+        "data": attr.label_list(allow_files = True),
         "deps": attr.label_list(),
         "env": attr.string_dict(),
         "env_inherit": attr.string_list(),
         "srcs": attr.label_list(allow_files = True),
+        "_runfiles_lib": attr.label(
+            default = "@bazel_tools//tools/bash/runfiles",
+        ),
         "_template": attr.label(
             allow_single_file = True,
             default = ":private/test.sh.template",
