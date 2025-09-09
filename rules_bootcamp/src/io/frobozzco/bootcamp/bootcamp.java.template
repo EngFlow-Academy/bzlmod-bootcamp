@@ -1,7 +1,0 @@
-package com.frobozzco.bootcamp;
-
-public class {{class_name}} {
-    public final String VERSION = "{{version}}";
-    public final String[] VERSIONS = {{{versions}}};
-    public final boolean SOME_FEATURE_ENABLED = {{some_feature_enabled}};
-}

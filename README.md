@@ -19,12 +19,12 @@ migrating to at least Bazel 7 before using it._
 
 This [git][] repository contains two separate Bazel repositories:
 
-- [bootcamp][]: A repository that depends upon `rules_bootcamp`
-- [rules_bootcamp][]: A rule set repository
+- [bootcamp][]: A repository that depends upon `rules_magic`
+- [rules_magic][]: A rule set repository
 
 Run your IDE from the root of this `git` repository. However, __Bazel
 commands for this workshop will run in either the [bootcamp][] or
-[rules_bootcamp][] Bazel repositories.__
+[rules_magic][] Bazel repositories.__
 
 ## Topics
 
@@ -104,7 +104,7 @@ your own projects, however unique the details of those challenges may be.
 [git]: https://git-scm.com/
 [msvc]: https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022
 [rolling]: https://bazel.build/release/rolling
-[rules_bootcamp]: ./rules_bootcamp/
+[rules_magic]: ./rules_magic/
 [rules_scala]: https://github.com/bazel-contrib/rules_scala
 [scala-bzlmod]: https://github.com/bazel-contrib/rules_scala/issues/1482
 [use_repo_rule]: https://bazel.build/rules/lib/globals/module#use_repo_rule

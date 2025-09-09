@@ -1,4 +1,4 @@
-"""bootcamp_library implementation"""
+"""magic_library implementation"""
 
 _ATTRS = {
     "version": attr.string(),
@@ -8,19 +8,19 @@ _ATTRS = {
     ),
     "_template": attr.label(
         allow_single_file = True,
-        default = ":private/bootcamp.java.template",
+        default = ":private/magic.java.template",
     ),
 }
 
-_TOOLCHAIN_TYPE = "@io_frobozzco_rules_bootcamp//bootcamp:toolchain_type"
+_TOOLCHAIN_TYPE = "@com_frobozz_rules_magic//magic:toolchain_type"
 
-def _bootcamp_library_impl(ctx):
-    info = ctx.toolchains[_TOOLCHAIN_TYPE].bootcamp_info
+def _magic_library_impl(ctx):
+    info = ctx.toolchains[_TOOLCHAIN_TYPE].magic_info
     version = ctx.attr.version or info.version
     some_feature = info.some_feature
 
     if version not in info.versions:
-        fail("rules_bootcamp version %s not in: %s" % (version, info.versions))
+        fail("rules_magic version %s not in: %s" % (version, info.versions))
 
     class_name = ctx.label.name.replace("-", "_")
     class_name = "".join([s.capitalize() for s in class_name.split("_")])
@@ -49,8 +49,8 @@ def _bootcamp_library_impl(ctx):
         ),
     ]
 
-bootcamp_library = rule(
-    implementation = _bootcamp_library_impl,
+magic_library = rule(
+    implementation = _magic_library_impl,
     attrs = _ATTRS,
     fragments = ["java"],
     provides = [JavaInfo],

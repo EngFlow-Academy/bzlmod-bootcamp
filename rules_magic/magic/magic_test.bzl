@@ -1,4 +1,4 @@
-"""Implementation of the bootcamp_test rule.
+"""Implementation of the magic_test rule.
 
 Lifted `_expand_part`, `expand_vars`, and `run_environment_info` from
 rules_scala's `scala/private/phases/phase_runenvironmentinfo_provider.bzl`.
@@ -31,7 +31,7 @@ def run_environment_info(ctx):
         inherited_environment = getattr(ctx.attr, "env_inherit", []),
     )
 
-def _bootcamp_test_impl(ctx):
+def _magic_test_impl(ctx):
     executable = ctx.actions.declare_file(ctx.label.name)
 
     ctx.actions.expand_template(
@@ -64,8 +64,8 @@ def _bootcamp_test_impl(ctx):
         run_environment_info(ctx),
     ]
 
-bootcamp_test = rule(
-    implementation = _bootcamp_test_impl,
+magic_test = rule(
+    implementation = _magic_test_impl,
     doc = "A glorified sh_test",
     # See https://bazel.build/extending/rules#test_rules for implicit
     # dependencies used by Bazel to generate coverage reports.
