@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""bootcamp_digests implementation"""
+"""magic_digests implementation"""
 
 _ATTRS = {
     "deps": attr.label_list(
@@ -20,13 +20,13 @@ _ATTRS = {
         mandatory = True,
     ),
     "worker": attr.label(
-        default = Label("//src/io/frobozzco/bootcamp:EmitDigestsWorker"),
+        default = Label("//src/com/frobozz/magic:EmitDigestsWorker"),
         executable = True,
         cfg = "exec",
     ),
 }
 
-def _bootcamp_digests_impl(ctx):
+def _magic_digests_impl(ctx):
     args = ctx.actions.args()
     args.set_param_file_format("multiline")
     args.use_param_file(param_file_arg = "@%s", use_always = True)
@@ -41,7 +41,7 @@ def _bootcamp_digests_impl(ctx):
         inputs = ctx.files.deps,
         outputs = outputs,
         executable = ctx.executable.worker,
-        mnemonic = "BootcampDigests",
+        mnemonic = "MagicDigests",
         execution_requirements = {
             "supports-workers" : "1",
         },
@@ -50,7 +50,7 @@ def _bootcamp_digests_impl(ctx):
 
     return DefaultInfo(files = depset(outputs))
 
-bootcamp_digests = rule(
-    implementation = _bootcamp_digests_impl,
+magic_digests = rule(
+    implementation = _magic_digests_impl,
     attrs = _ATTRS,
 )

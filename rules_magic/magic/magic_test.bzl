@@ -17,7 +17,7 @@
 # Copied `_expand_part`, `expand_vars`, and `run_environment_info` from:
 # - https://github.com/bazel-contrib/rules_scala/blob/v7.1.4/scala/private/phases/phase_runenvironmentinfo_provider.bzl
 
-"""Implementation of the bootcamp_test rule."""
+"""Implementation of the magic_test rule."""
 
 def _expand_part(ctx, attr_name, part, targets, additional_vars):
     """Perform `$(location)` and "Make variable" substitution for `expand_vars`
@@ -46,7 +46,7 @@ def run_environment_info(ctx):
         inherited_environment = getattr(ctx.attr, "env_inherit", []),
     )
 
-def _bootcamp_test_impl(ctx):
+def _magic_test_impl(ctx):
     executable = ctx.actions.declare_file(ctx.label.name)
 
     ctx.actions.expand_template(
@@ -79,8 +79,8 @@ def _bootcamp_test_impl(ctx):
         run_environment_info(ctx),
     ]
 
-bootcamp_test = rule(
-    implementation = _bootcamp_test_impl,
+magic_test = rule(
+    implementation = _magic_test_impl,
     doc = "A glorified sh_test",
     # See https://bazel.build/extending/rules#test_rules for implicit
     # dependencies used by Bazel to generate coverage reports.
