@@ -58,6 +58,6 @@ magic_digests(
 magic_test(
     name = "example_test",
     srcs = ["test.sh"],
-    data = ["$(location @com_frobozz_rules_magic_leaflet)"],
+    data = ["$(rootpath @com_frobozz_rules_magic_leaflet)"],
     deps = ["@com_frobozz_rules_magic_leaflet"],
 )
