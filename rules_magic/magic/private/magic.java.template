@@ -1,4 +1,4 @@
-package com.frobozzco.bootcamp;
+package com.frobozz.magic;
 
 public class {{class_name}} {
     public final String VERSION = "{{version}}";

@@ -1,11 +1,8 @@
-load("@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl", "bootcamp_library")
-load(
-    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp_toolchain.bzl",
-    "bootcamp_toolchain",
-)
+load("@com_frobozz_rules_magic//magic:magic.bzl", "magic_library")
+load("@com_frobozz_rules_magic//magic:magic_toolchain.bzl", "magic_toolchain")
 
 exports_files(
-    ["private/bootcamp.java.template"],
+    ["private/magic.java.template"],
     visibility = [":__pkg__"],
 )
 
@@ -14,7 +11,7 @@ toolchain_type(
     visibility = ["//visibility:public"],
 )
 
-bootcamp_toolchain(
+magic_toolchain(
     name = "default_settings",
 )
 
@@ -24,6 +21,6 @@ toolchain(
     toolchain_type = ":toolchain_type",
 )
 
-bootcamp_library(
+magic_library(
     name = "default-values",
 )

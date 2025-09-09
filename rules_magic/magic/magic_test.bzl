@@ -1,4 +1,4 @@
-"""Implementation of the bootcamp_test rule."""
+"""Implementation of the magic_test rule."""
 
 _PREAMBLE = """\
 #!/usr/bin/env bash
@@ -18,7 +18,7 @@ def _make_script(ctx):
         for f in ctx.files.srcs
     ])
 
-def _bootcamp_test_impl(ctx):
+def _magic_test_impl(ctx):
     executable = ctx.actions.declare_file(ctx.label.name)
     ctx.actions.write(executable, _make_script(ctx), is_executable = True)
 
@@ -35,8 +35,8 @@ def _bootcamp_test_impl(ctx):
         ),
     ]
 
-bootcamp_test = rule(
-    implementation = _bootcamp_test_impl,
+magic_test = rule(
+    implementation = _magic_test_impl,
     doc = "A glorified sh_test",
     # See https://bazel.build/extending/rules#test_rules for implicit
     # dependencies used by Bazel to generate coverage reports.

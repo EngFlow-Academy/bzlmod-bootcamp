@@ -1,11 +1,11 @@
 load(
-    "@io_frobozzco_rules_bootcamp//bootcamp:bootcamp.bzl",
-    "bootcamp_digests",
-    "bootcamp_library",
-    "bootcamp_test",
+    "@com_frobozz_rules_magic//magic:magic.bzl",
+    "magic_digests",
+    "magic_library",
+    "magic_test",
 )
 
-bootcamp_library(
+magic_library(
     name = "default-values",
 )
 
@@ -14,35 +14,35 @@ bootcamp_library(
 # - https://github.com/mbland/bazel-8-location
 genrule(
     name = "leaflet",
-    srcs = ["@io_frobozzco_rules_bootcamp_leaflet"],
+    srcs = ["@com_frobozz_rules_magic_leaflet"],
     outs = ["leaflet.txt"],
-    cmd = "cp $(location @io_frobozzco_rules_bootcamp_leaflet) $@",
+    cmd = "cp $(location @com_frobozz_rules_magic_leaflet) $@",
 )
 
 genrule(
     name = "expansions",
-    srcs = ["@io_frobozzco_rules_bootcamp_leaflet"],
+    srcs = ["@com_frobozz_rules_magic_leaflet"],
     outs = ["expansions.txt"],
     cmd = "\n".join([
-        "echo {f}: $({f} @io_frobozzco_rules_bootcamp_leaflet) >>$@".format(f = f)
+        "echo {f}: $({f} @com_frobozz_rules_magic_leaflet) >>$@".format(f = f)
         for f in ["execpath", "rootpath", "location"]
     ])
 )
 
-bootcamp_digests(
+magic_digests(
     name = "hello",
     deps = [
         ":default-values",
         ":expansions",
         ":hello.txt",
         ":leaflet",
-        "@io_frobozzco_rules_bootcamp_leaflet",
+        "@com_frobozz_rules_magic_leaflet",
     ],
 )
 
-bootcamp_test(
+magic_test(
     name = "example_test",
     srcs = ["test.sh"],
-    deps = ["@io_frobozzco_rules_bootcamp_leaflet"],
-    data = ["$(location @io_frobozzco_rules_bootcamp_leaflet)"],
+    deps = ["@com_frobozz_rules_magic_leaflet"],
+    data = ["$(location @com_frobozz_rules_magic_leaflet)"],
 )

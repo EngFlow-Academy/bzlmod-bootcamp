@@ -1,4 +1,4 @@
-package io.frobozzco.bootcamp;
+package com.frobozz.magic;
 
 import com.google.devtools.build.lib.worker.WorkerProtocol.Input;
 import com.google.devtools.build.lib.worker.WorkerProtocol.WorkRequest;

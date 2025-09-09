@@ -1,14 +1,14 @@
-"""Generates the @io_bazel_rules_bootcamp_config repo.
+"""Generates the @com_frobozz_rules_magic_config repo.
 
 Modeled after @rules_scala//scala_config.bzl.
 """
 
-DEFAULT_BOOTCAMP_VERSION = "1.2.3"
+DEFAULT_MAGIC_VERSION = "1.2.3"
 
 _CONFIG_BUILD = """load("@bazel_skylib//rules:common_settings.bzl", "string_setting")
 
 string_setting(
-    name = "bootcamp_version",
+    name = "magic_version",
     build_setting_default = "{version}",
     values = {versions},
     visibility = ["//visibility:public"],
@@ -17,8 +17,8 @@ string_setting(
 """
 
 _CONFIG_SETTING = """config_setting(
-    name = "bootcamp_version_{suffix}",
-    flag_values = {{":bootcamp_version": "{version}"}},
+    name = "magic_version_{suffix}",
+    flag_values = {{":magic_version": "{version}"}},
     visibility = ["//visibility:public"],
 )
 """
@@ -36,8 +36,8 @@ def _build_file_content(version, versions):
 
 def _config_file_content(version, versions, enable_some_feature):
     return "\n".join([
-        "BOOTCAMP_VERSION = \"" + version + "\"",
-        "BOOTCAMP_VERSIONS = " + str(versions),
+        "MAGIC_VERSION = \"" + version + "\"",
+        "MAGIC_VERSIONS = " + str(versions),
         "ENABLE_SOME_FEATURE = " + enable_some_feature,
     ]) + "\n"
 
@@ -46,7 +46,7 @@ def _store_config(repository_ctx):
     rctx_attr = repository_ctx.attr
 
     # Default version
-    version = rctx_env.get("BOOTCAMP_VERSION", rctx_attr.version)
+    version = rctx_env.get("MAGIC_VERSION", rctx_attr.version)
     enable_some_feature = rctx_env.get(
         "ENABLE_SOME_FEATURE",
         str(rctx_attr.enable_some_feature),
@@ -57,8 +57,8 @@ def _store_config(repository_ctx):
         versions = [version]
     elif version not in versions:
         fail(
-            "You have to include the default bootcamp version " +
-            "(%s) in the `bootcamp_versions` list." % version
+            "You have to include the default magic version " +
+            "(%s) in the `magic_versions` list." % version
         )
 
     repository_ctx.file("BUILD", _build_file_content(version, versions))
@@ -73,16 +73,16 @@ def _store_config(repository_ctx):
 
 _config_repository = repository_rule(
     implementation = _store_config,
-    doc = "rules_bootcamp configuration parameters",
+    doc = "rules_magic configuration parameters",
     attrs = {
         "version": attr.string(
             mandatory = True,
-            doc = "Default Bootcamp version",
+            doc = "Default magic version",
         ),
         "versions": attr.string_list(
             mandatory = True,
             doc = (
-                "List of all Bootcamp versions to configure. " +
+                "List of all magic versions to configure. " +
                 "Must include the default version."
             ),
         ),
@@ -91,15 +91,15 @@ _config_repository = repository_rule(
             doc = "Boolean to enable or disable some feature",
         ),
     },
-    environ = ["BOOTCAMP_VERSION", "ENABLE_SOME_FEATURE"],
+    environ = ["MAGIC_VERSION", "ENABLE_SOME_FEATURE"],
 )
 
-def bootcamp_config(
-        version = DEFAULT_BOOTCAMP_VERSION,
+def magic_config(
+        version = DEFAULT_MAGIC_VERSION,
         versions = [],
         enable_some_feature = False):
     _config_repository(
-        name = "io_frobozzco_rules_bootcamp_config",
+        name = "com_frobozz_rules_magic_config",
         version = version,
         versions = versions,
         enable_some_feature = enable_some_feature,
