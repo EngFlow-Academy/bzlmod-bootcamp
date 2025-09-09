@@ -1,5 +1,5 @@
 test_leaflet_exists() {
-  local leaflet_path="${DATA_FILES[0]}"
+  local leaflet_path="$(rlocation com_frobozz_rules_magic_leaflet/leaflet.txt)"
 
   if [[ -z "$leaflet_path" ]]; then
     echo "No leaflet_path specified."
