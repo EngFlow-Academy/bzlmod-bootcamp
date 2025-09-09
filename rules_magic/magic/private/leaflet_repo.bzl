@@ -9,7 +9,7 @@ https://web.mit.edu/marleigh/www/portfolio/Files/zork/transcript.html
 
 _BUILD_CONTENT = """\
 load(
-    "@com_frobozz_rules_magic//magic:private/magic_leaflet.bzl",
+    "@@{rules_magic_repo}//magic:private/magic_leaflet.bzl",
     "magic_leaflet",
 )
 
@@ -20,11 +20,16 @@ magic_leaflet(
 )
 """
 
+_RULES_MAGIC_REPO = Label("//:all").repo_name
+
 def _magic_leaflet_repo_impl(rctx):
     rctx.file("leaflet.txt", _LEAFLET_CONTENT, executable = False)
     rctx.file(
         "BUILD",
-        _BUILD_CONTENT.format(leaflet_name = rctx.name),
+        _BUILD_CONTENT.format(
+            rules_magic_repo = _RULES_MAGIC_REPO,
+            leaflet_name = rctx.name,
+        ),
         executable = False,
     )
 
