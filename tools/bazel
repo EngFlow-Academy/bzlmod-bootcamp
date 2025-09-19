@@ -55,4 +55,9 @@ elif [[ -n "${USE_LEGACY_WORKSPACE:-}" ]]; then
   bazel+=('--bazelrc=../.bazelrc-legacy')
 fi
 
+if [[ "${USE_BAZEL_VERSION:-}" =~ ^7\. ]]; then
+  # Required to build `protobuf` >= v32 with Bazel 7.
+  bazel+=('--bazelrc=../.bazelrc-cxxopts')
+fi
+
 exec "${bazel[@]}" "$@"

@@ -45,5 +45,5 @@ magic_config.settings(
 
 # Dev deps, kept to maintain parity with deps.bzl. Also, since Bazel depends on
 # these, this helps minimize MODULE.bazel.lock bloat and churn.
-bazel_dep(name = "rules_cc", version = "0.1.1", dev_dependency = True)
-bazel_dep(name = "rules_python", version = "1.0.0", dev_dependency = True)
+bazel_dep(name = "rules_cc", version = "0.2.11", dev_dependency = True)
+bazel_dep(name = "rules_python", version = "1.4.1", dev_dependency = True)
