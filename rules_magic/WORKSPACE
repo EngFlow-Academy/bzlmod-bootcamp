@@ -28,6 +28,18 @@ load("//magic:magic.bzl", "rules_magic_deps", "rules_magic_toolchains")
 
 rules_magic_deps()
 
+# Required by rules_java >= 8.16.0:
+# - https://github.com/bazelbuild/rules_java/releases/tag/8.16.0
+load("@bazel_features//:deps.bzl", "bazel_features_deps")
+
+bazel_features_deps()
+
+# Required by rules_cc >= 0.2.0
+# - https://github.com/bazelbuild/rules_cc/releases/tag/0.2.0
+load("@rules_cc//cc:extensions.bzl", "compatibility_proxy_repo")
+
+compatibility_proxy_repo()
+
 # Note that `rules_java` 8.x suggests loading `protobuf_deps()` after
 # `rules_java_dependencies` and before `rules_java_toolchains()`:
 # - https://github.com/bazelbuild/rules_java/releases/tag/8.9.0
