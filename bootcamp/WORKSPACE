@@ -17,6 +17,9 @@ workspace(name = "bzlmod_bootcamp")
 local_repository(
     name = "rules_magic",
     path = "../rules_magic",
+    repo_mapping = {
+        "@com_frobozz_rules_magic": "@rules_magic",
+    },
 )
 
 load("@rules_magic//magic:config.bzl", "magic_config")
