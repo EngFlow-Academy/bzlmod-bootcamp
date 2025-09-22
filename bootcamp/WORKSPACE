@@ -15,11 +15,11 @@
 workspace(name = "bzlmod_bootcamp")
 
 local_repository(
-    name = "com_frobozz_rules_magic",
+    name = "rules_magic",
     path = "../rules_magic",
 )
 
-load("@com_frobozz_rules_magic//magic:config.bzl", "magic_config")
+load("@rules_magic//magic:config.bzl", "magic_config")
 
 magic_config(
     games = [
@@ -35,7 +35,7 @@ magic_config(
 )
 
 load(
-    "@com_frobozz_rules_magic//magic:magic.bzl",
+    "@rules_magic//magic:magic.bzl",
     "rules_magic_deps",
     "rules_magic_leaflet_repository",
     "rules_magic_toolchains",
