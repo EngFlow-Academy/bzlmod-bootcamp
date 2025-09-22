@@ -57,7 +57,7 @@ test_uses_different_toolchain_based_on_game() {
 }
 
 test_uses_toolchain_from_command_line() {
-  local toolchain='@com_frobozz_rules_magic//toolchains:spellbreaker_toolchain'
+  local toolchain='@rules_magic//toolchains:spellbreaker_toolchain'
   local output
   _run_emit_values "--extra_toolchains=${toolchain}"
 

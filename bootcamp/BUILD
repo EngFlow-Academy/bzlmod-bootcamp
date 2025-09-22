@@ -1,5 +1,5 @@
 load(
-    "@com_frobozz_rules_magic//magic:magic.bzl",
+    "@rules_magic//magic:magic.bzl",
     "magic_digests",
     "magic_library",
     "magic_test",
