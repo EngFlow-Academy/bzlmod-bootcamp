@@ -13,7 +13,7 @@
 # limitations under the License.
 
 load(
-    "@com_frobozz_rules_magic//magic:magic.bzl",
+    "@rules_magic//magic:magic.bzl",
     "magic_binary",
     "magic_digests",
     "magic_library",
