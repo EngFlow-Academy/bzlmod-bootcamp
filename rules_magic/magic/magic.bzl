@@ -21,14 +21,19 @@ load(
     _magic_leaflet_repo = "magic_leaflet_repo",
 )
 load(
-    "@com_frobozz_rules_magic//magic:toolchains.bzl",
-    _rules_magic_toolchains = "rules_magic_toolchains",
+    "@com_frobozz_rules_magic//toolchains:repositories.bzl",
+    _rules_magic_spells_repositories = "rules_magic_spells_repositories",
 )
+
 magic_digests = _magic_digests
 magic_library = _magic_library
 magic_test = _magic_test
 rules_magic_deps = _rules_magic_deps
-rules_magic_toolchains = _rules_magic_toolchains
+rules_magic_spells_repositories = _rules_magic_spells_repositories
 
 def rules_magic_leaflet_repo():
     _magic_leaflet_repo(name = "com_frobozz_rules_magic_leaflet")
+
+def rules_magic_toolchains():
+    _rules_magic_spells_repositories()
+    native.register_toolchains("@com_frobozz_rules_magic//toolchains:all")
