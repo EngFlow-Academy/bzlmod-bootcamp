@@ -6,12 +6,13 @@ Modeled after @rules_scala//scala_config.bzl.
 DEFAULT_MAGIC_VERSION = "1.2.3"
 DEFAULT_GAME = "enchanter"
 
-_CONFIG_BUILD = (
-"""load("@bazel_skylib//rules:common_settings.bzl", "string_setting")
+_CONFIG_BUILD = """\
+load("@bazel_skylib//rules:common_settings.bzl", "string_setting")
 
-{settings}""")
+{settings}"""
 
-_STRING_SETTING_TEMPLATE = """string_setting(
+_STRING_SETTING_TEMPLATE = """\
+string_setting(
     name = "{name}",
     build_setting_default = "{default}",
     values = {values},
@@ -19,7 +20,8 @@ _STRING_SETTING_TEMPLATE = """string_setting(
 )
 """
 
-_CONFIG_SETTING_TEMPLATE = """config_setting(
+_CONFIG_SETTING_TEMPLATE = """\
+config_setting(
     name = "{name}_{suffix}",
     flag_values = {{":{name}": "{value}"}},
     visibility = ["//visibility:public"],

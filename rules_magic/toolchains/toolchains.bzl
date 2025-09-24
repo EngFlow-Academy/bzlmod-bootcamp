@@ -15,13 +15,15 @@ _ATTRS = {
     "magic_version": attr.string(default = MAGIC_VERSION),
     "game": attr.string(default = GAME),
     "spells_json": attr.label(
-        allow_files = [".json"],
+        allow_single_file = True,
         mandatory = True,
     ),
+    "spells_root": attr.string(mandatory = True),
     "some_feature": attr.bool(default = ENABLE_SOME_FEATURE),
 }
 
 def _magic_toolchain_impl(ctx):
+    print("ROOT:", ctx.attr.spells_root)
     return [
         platform_common.ToolchainInfo(
             magic_info = MagicInfo(
@@ -54,6 +56,7 @@ def setup_magic_toolchain(
         magic_version = magic_version,
         game = game,
         spells_json = "//external:%s_spells" % game,
+        spells_root = Label("@rules_magic_spells_" + game).workspace_root,
         some_feature = some_feature,
     )
 
