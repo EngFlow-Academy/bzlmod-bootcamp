@@ -19,6 +19,13 @@ local_repository(
     path = "../rules_magic"
 )
 
+load("@com_frobozz_rules_magic//magic:config.bzl", "magic_config")
+
+magic_config(
+    versions = ["1.2.3", "4.5.6", "7.8.9"],
+    games = ["enchanter", "sorcerer", "spellbreaker"],
+)
+
 load(
     "@com_frobozz_rules_magic//magic:magic.bzl",
     "rules_magic_deps",
@@ -27,7 +34,6 @@ load(
 )
 
 rules_magic_deps()
-rules_magic_leaflet_repository()
 
 load(
     "@rules_java//java:repositories.bzl",
@@ -47,10 +53,5 @@ load(
 rules_proto_dependencies()
 rules_proto_toolchains()
 
-load("@com_frobozz_rules_magic//magic:config.bzl", "magic_config")
-
-magic_config(
-    versions = ["1.2.3", "4.5.6", "7.8.9"],
-)
-
+rules_magic_leaflet_repository()
 rules_magic_toolchains()

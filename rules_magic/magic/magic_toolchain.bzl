@@ -12,18 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""https://bazel.build/extending/toolchains"""
+"""Rule for defining a rules_magic toolchain implementation.
 
-load("@com_frobozz_rules_magic//magic:providers.bzl", "MagicInfo")
+See: https://bazel.build/extending/toolchains
+"""
+
+load("@com_frobozz_rules_magic//magic:magic_info.bzl", "MagicInfo")
 load(
     "@com_frobozz_rules_magic_config//:config.bzl",
+    "ENABLE_SOME_FEATURE",
+    "GAME",
+    "GAMES",
     "MAGIC_VERSION",
     "MAGIC_VERSIONS",
-    "ENABLE_SOME_FEATURE",
 )
 
 _ATTRS = {
-    "version": attr.string(default = MAGIC_VERSION),
+    "magic_version": attr.string(default = MAGIC_VERSION),
+    "game": attr.string(default = GAME),
+    "spells_json": attr.label(
+        allow_single_file = [".json"],
+        mandatory = True,
+    ),
     "some_feature": attr.bool(default = ENABLE_SOME_FEATURE),
 }
 
@@ -31,9 +41,12 @@ def _magic_toolchain_impl(ctx):
     return [
         platform_common.ToolchainInfo(
             magic_info = MagicInfo(
-                version = ctx.attr.version,
+                version = ctx.attr.magic_version,
                 versions = MAGIC_VERSIONS,
+                game = ctx.attr.game,
+                games = GAMES,
                 some_feature = ctx.attr.some_feature,
+                spells_json = ctx.attr.spells_json,
             )
         ),
     ]

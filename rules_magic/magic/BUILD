@@ -12,8 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@com_frobozz_rules_magic//magic:magic.bzl", "magic_library")
-load("@com_frobozz_rules_magic//magic:magic_toolchain.bzl", "magic_toolchain")
+load("@com_frobozz_rules_magic//magic:magic.bzl",
+    "magic_library",
+    "setup_magic_toolchain",
+)
+load(
+    "@com_frobozz_rules_magic//magic:private/setup_magic_spells_repositories.bzl",
+    "BUILTIN_GAMES",
+)
 
 exports_files(
     [
@@ -23,21 +29,24 @@ exports_files(
     visibility = [":__pkg__"],
 )
 
-toolchain_type(
-    name = "toolchain_type",
-    visibility = ["//visibility:public"],
-)
-
-magic_toolchain(
-    name = "default_settings",
-)
-
-toolchain(
-    name = "default_settings_toolchain",
-    toolchain = ":default_settings",
-    toolchain_type = ":toolchain_type",
-)
-
 magic_library(
     name = "default-values",
 )
+
+# Toolchains of this type must return a `ToolchainInfo` object with the
+# `MagicInfo` provider from `magic_info.bzl`:
+#
+#   ToolchainInfo(
+#       magic_info = MagicInfo(...),
+#   )
+toolchain_type(name = "toolchain_type")
+
+setup_magic_toolchain(name = "default_settings_toolchain")
+
+[
+    setup_magic_toolchain(
+        name = game + "_toolchain",
+        game = game,
+    )
+    for game in BUILTIN_GAMES
+]

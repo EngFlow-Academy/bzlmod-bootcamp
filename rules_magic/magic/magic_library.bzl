@@ -39,6 +39,7 @@ def _magic_library_impl(ctx):
     class_name = ctx.label.name.replace("-", "_")
     class_name = "".join([s.capitalize() for s in class_name.split("_")])
     src_file = ctx.actions.declare_file(class_name + ".java")
+    spells_json = info.spells_json[DefaultInfo].files.to_list()[0]
 
     ctx.actions.expand_template(
         template = ctx.file._template,
@@ -47,14 +48,21 @@ def _magic_library_impl(ctx):
             "{{class_name}}": class_name,
             "{{version}}": version,
             "{{versions}}": str(info.versions)[1:-1],
+            "{{game}}": info.game,
+            "{{games}}": str(info.games)[1:-1],
             "{{some_feature_enabled}}": str(some_feature).lower(),
+            "{{spells_json}}": spells_json.path,
         },
     )
 
     output_jar = ctx.actions.declare_file(class_name + ".jar")
     compile_toolchain = ctx.attr.java_compile_toolchain
+
     return [
-        DefaultInfo(files = depset([output_jar])),
+        DefaultInfo(
+            files = depset([output_jar]),
+            runfiles = ctx.runfiles(files = [spells_json]),
+        ),
         java_common.compile(
             ctx,
             output = output_jar,

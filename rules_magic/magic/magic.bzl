@@ -15,6 +15,10 @@
 """rules_magic public API"""
 
 load(
+    "@com_frobozz_rules_magic//magic:deps.bzl",
+    _rules_magic_deps = "rules_magic_deps",
+)
+load(
     "@com_frobozz_rules_magic//magic:magic_digests.bzl",
     _magic_digests = "magic_digests",
 )
@@ -23,26 +27,37 @@ load(
     _magic_library = "magic_library",
 )
 load(
+    "@com_frobozz_rules_magic//magic:magic_spells_repository.bzl",
+    _magic_spells_repository = "magic_spells_repository",
+)
+load(
     "@com_frobozz_rules_magic//magic:magic_test.bzl",
     _magic_test = "magic_test",
 )
 load(
-    "@com_frobozz_rules_magic//magic:deps.bzl",
-    _rules_magic_deps = "rules_magic_deps",
+    "@com_frobozz_rules_magic//magic:magic_toolchain.bzl",
+    _magic_toolchain = "magic_toolchain",
 )
 load(
     "@com_frobozz_rules_magic//magic:private/magic_leaflet_repository.bzl",
     _magic_leaflet_repository = "magic_leaflet_repository",
 )
 load(
-    "@com_frobozz_rules_magic//magic:toolchains.bzl",
-    _rules_magic_toolchains = "rules_magic_toolchains",
+    "@com_frobozz_rules_magic//magic:private/setup_magic_spells_repositories.bzl",
+    "setup_magic_spells_repositories",
 )
+load(
+    "@com_frobozz_rules_magic//magic:private/setup_magic_toolchain.bzl",
+    _setup_magic_toolchain = "setup_magic_toolchain",
+)
+
 magic_digests = _magic_digests
 magic_library = _magic_library
+magic_spells_repository = _magic_spells_repository
 magic_test = _magic_test
+magic_toolchain = _magic_toolchain
 rules_magic_deps = _rules_magic_deps
-rules_magic_toolchains = _rules_magic_toolchains
+setup_magic_toolchain = _setup_magic_toolchain
 
 def rules_magic_leaflet_repository(name = "com_frobozz_rules_magic_leaflet"):
     """Instantiates the @rules_magic_leaflet repository.
@@ -51,3 +66,12 @@ def rules_magic_leaflet_repository(name = "com_frobozz_rules_magic_leaflet"):
         name: the name of the magic leaflet repository
     """
     _magic_leaflet_repository(name = name)
+
+def rules_magic_toolchains(name = None):
+    """Instantiates toolchain dependencies and registers builtin toolchains.
+
+    Args:
+        name: unused; defined to satisfy buildifier
+    """
+    setup_magic_spells_repositories(name = name)
+    native.register_toolchains("@com_frobozz_rules_magic//magic:all")

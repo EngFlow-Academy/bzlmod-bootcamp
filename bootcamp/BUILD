@@ -19,8 +19,17 @@ load(
     "magic_test",
 )
 
+load("@rules_java//java:defs.bzl", "java_binary")
+
 magic_library(
     name = "default-values",
+)
+
+java_binary(
+    name = "EmitValues",
+    main_class = "bootcamp.EmitValues",
+    srcs = ["EmitValues.java"],
+    deps = [":default-values"],
 )
 
 genrule(
