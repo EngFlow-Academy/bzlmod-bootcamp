@@ -14,10 +14,13 @@
 
 """Module extension for rules_magic toolchains."""
 
-load("//magic:magic.bzl", "rules_magic_toolchains")
+load(
+    "//magic:private/setup_magic_spells_repositories.bzl",
+    "setup_magic_spells_repositories",
+)
 
 def _magic_toolchains_impl(mctx):
-    rules_magic_toolchains()
+    setup_magic_spells_repositories()
     return mctx.extension_metadata(reproducible = True)
 
 magic_toolchains = module_extension(
