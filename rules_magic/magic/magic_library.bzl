@@ -49,7 +49,7 @@ def _magic_library_impl(ctx):
             "{{games}}": str(info.games)[1:-1],
             "{{game}}": info.game,
             "{{some_feature_enabled}}": str(some_feature).lower(),
-            "{{spells_json}}": spells_json.path,
+            "{{spells_json}}": spells_json.short_path,
             "{{versions}}": str(info.versions)[1:-1],
             "{{version}}": version,
         },
