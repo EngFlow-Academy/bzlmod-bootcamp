@@ -36,8 +36,3 @@ def setup_magic_spells_repositories(name = None):
             name = repo_name,
             spells_json = Label("//magic:private/spells/%s.json" % game),
         )
-
-        native.bind(
-            name = game + "_spells",
-            actual = "@%s" % repo_name,
-        )
