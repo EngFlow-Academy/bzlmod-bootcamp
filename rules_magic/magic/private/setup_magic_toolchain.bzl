@@ -30,7 +30,7 @@ def setup_magic_toolchain(
         spells_json = None,
         some_feature = ENABLE_SOME_FEATURE):
     if spells_json == None and game in BUILTIN_GAMES:
-        spells_json = "//external:%s_spells" % game
+        spells_json = "@rules_magic_spells_" + game
 
     magic_toolchain(
         name = name + "_impl",
