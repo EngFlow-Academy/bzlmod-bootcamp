@@ -22,8 +22,3 @@ def rules_magic_spells_repositories():
             path = "../spells/" + game,
             build_file_content = _BUILD_FILE.format(repo_name = repo_name),
         )
-
-        native.bind(
-            name = game + "_spells",
-            actual = "@%s" % repo_name,
-        )

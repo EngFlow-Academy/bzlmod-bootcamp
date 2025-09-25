@@ -53,7 +53,7 @@ def setup_magic_toolchain(
         name = name + "_impl",
         magic_version = magic_version,
         game = game,
-        spells_json = "//external:%s_spells" % game,
+        spells_json = "@rules_magic_spells_" + game,
         some_feature = some_feature,
     )
 
