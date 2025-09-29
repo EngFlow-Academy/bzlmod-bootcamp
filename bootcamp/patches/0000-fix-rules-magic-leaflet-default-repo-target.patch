@@ -1,0 +1,131 @@
+# Copyright 2025 EngFlow, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+commit 8ce434d54ec3f4f2be3b084a00ead09d497d64b9
+Author: Mike Bland <mbland@engflow.com>
+Date:   Tue Sep 2 17:07:53 2025 -0400
+
+    Fix default @rules_magic_leaflet_repo target
+    
+    Fixes the breakage in `@rules_magic_leaflet` from the previous commit by
+    using two mechanisms for generating a default target name in a
+    repository rule.
+    
+    - Bazel 7.7.0 and 8.1.1 provide `repository_ctx.original_name` to
+      facilitate the generation of default repo target names.
+    
+    - For earlier Bazels, the wrapper macro and `default_target_name`
+      attribute pass through the original repo name for when
+      `repository_ctx.original_name` isn't available.
+    
+    Using both for now provides backwards and forward compatibility across
+    Bazel versions while avoiding the need for parsing the canonical repo
+    name format. The canonical repo name format has changed several times,
+    making this a very practical concern.
+    
+    For more background, see:
+    
+    - https://github.com/bazelbuild/bazel/issues/24467
+    - https://github.com/bazelbuild/bazel/pull/25121
+    
+    As for why we recommend using Bazel 8.1.1 or later, instead of 8.1.0
+    when `repository_ctx.original_name` first appeared:
+    
+    - https://github.com/bazelbuild/bazel/issues/25286
+    
+    And as for why `rules_kotlin` appears now in `MODULE.bazel.lock`, I have
+    no idea.
+    
+    ---
+    
+    However, the build now breaks with the following errors. Bazel 7
+    reports:
+    
+    ```txt
+    ERROR: no such package 'external':
+      the WORKSPACE file is disabled via --noenable_workspace
+    
+    ERROR: external/rules_magic+/magic/BUILD:38:22:
+      no such package 'external':
+      the WORKSPACE file is disabled via --noenable_workspace
+      and referenced by
+      '@@rules_magic+//magic:default_settings_toolchain_impl'
+    
+    ERROR: Analysis of target '//:default-values' failed; build aborted:
+      Analysis failed
+    ```
+    
+    Bazel 8 reports:
+    
+    ```txt
+    ERROR: no such package '@@rules_magic+//external':
+      BUILD file not found in directory 'external'
+      of external repository @@rules_magic+.
+      Add a BUILD file to a directory to mark it as a package.
+    
+    ERROR: .../external/rules_magic+/magic/BUILD:38:22:
+      no such package '@@rules_magic+//external':
+      BUILD file not found in directory 'external'
+      of external repository @@rules_magic+.
+      Add a BUILD file to a directory to mark it as a package.
+      and referenced by
+      '@@rules_magic+//magic:default_settings_toolchain_impl'
+    
+    ERROR: Analysis of target '//:default-values' failed; build aborted:
+      Analysis failed
+    ```
+    
+    This is because `native.bind` doesn't work under Bzlmod. We're not yet
+    hitting the error indicating that `native.bind` is no longer available,
+    but that the artifical `//external` package no longer exists.
+
+diff --git a/rules_magic/magic/private/magic_leaflet_repository.bzl b/rules_magic/magic/private/magic_leaflet_repository.bzl
+index a4aada9..68678dc 100644
+--- a/rules_magic/magic/private/magic_leaflet_repository.bzl
++++ b/rules_magic/magic/private/magic_leaflet_repository.bzl
+@@ -38,16 +38,32 @@ magic_leaflet(
+ _RULES_MAGIC_REPO = Label("//:all").repo_name
+ 
+ def _magic_leaflet_repository_impl(rctx):
++    # Replace with `rctx.original_name` once all supported Bazels have it.
++    repo_name = getattr(rctx, "original_name", rctx.attr.default_target_name)
++
+     rctx.file("leaflet.txt", _LEAFLET_CONTENT, executable = False)
+     rctx.file(
+         "BUILD",
+         _BUILD_CONTENT.format(
+             rules_magic_repo = _RULES_MAGIC_REPO,
+-            leaflet_name = rctx.name,
++            leaflet_name = repo_name,
+         ),
+         executable = False,
+     )
+ 
+-magic_leaflet_repository = repository_rule(
++_magic_leaflet_repository = repository_rule(
+     implementation = _magic_leaflet_repository_impl,
++    attrs = {
++        # Remove once all supported Bazels have `repository_ctx.original_name`.
++        "default_target_name": attr.string(mandatory = True),
++    },
+ )
++
++# Restore the unwrapped `magic_leaflet_repo` rule once all supported
++# Bazels have `repository_ctx.original_name`.
++def magic_leaflet_repository(name, **kwargs):
++    _magic_leaflet_repository(
++        name = name,
++        default_target_name = name,
++        **kwargs
++    )
