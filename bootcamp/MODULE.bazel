@@ -61,9 +61,14 @@ magic_leaflet = use_extension(
 )
 use_repo(magic_leaflet, "rules_magic_leaflet")
 
-use_extension(
+magic_toolchains = use_extension(
     "//extensions:rules_magic_toolchains.bzl",
     "magic_toolchains",
+)
+use_repo(
+    magic_toolchains,
+    "rules_magic_spells_enchanter",
+    "rules_magic_spells_spellbreaker",
 )
 
 register_toolchains("@rules_magic//magic:all")
