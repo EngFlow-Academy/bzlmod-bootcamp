@@ -41,3 +41,5 @@ magic_toolchains = use_extension(
     "//extensions:rules_magic_toolchains.bzl",
     "magic_toolchains",
 )
+
+register_toolchains("@rules_magic//toolchains:all")
