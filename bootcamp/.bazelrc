@@ -1,1 +1,35 @@
-import ../.bazelrc
+# Select legacy `WORKSPACE` builds vs Bzlmod builds. Remove once Bazel 9 becomes
+# the minimum supported version, since it only supports Bzlmod.
+#
+# --enable_bzlmod defaults to `false` in Bazel 6 and `true` in Bazel 7.
+# --noenable_bzlmod ensures Bazel does _not_ create an empty MODULE.bazel file
+# when it doesn't already exist.
+#
+# --enable_workspace defaults to `true` in Bazel 7 and `false` in Bazel 8.
+# It doesn't exist in Bazel 6, and setting it causes Bazel 6 to break. The
+# presence of this flag is why `tools/bazel` makes Bazel 6 ignore this file
+# via `--noworkspace_rc`.
+common --enable_bzlmod --noenable_workspace
+
+# --incompatible_use_plus_in_repo_names is available in Bazel >= 7.3.0 to help
+# with Windows performance issues under Bzlmod. It's not strictly necessary, but
+# may help ensure compatibility with Bazel 8, in which it defaults to `true`.
+# Remove once Bazel 8 becomes the minimum supported version.
+common --incompatible_use_plus_in_repo_names
+
+# Uncomment to ensure the `MODULE.bazel.lock` file remains up to date relative
+# to the current value of `.bazelversion`.
+#
+# This gets very painful when switching between different versions of Bazel.
+# Since that's something this example project explicitly facilitates for
+# demonstration purposes, we leave it to default to `update`. You will notice
+# `MODULE.bazel.lock` showing git diffs when running different versions of
+# Bazel.
+#
+# - https://bazel.build/external/lockfile
+# - https://bazel.build/reference/command-line-reference#common_options-flag--lockfile_mode
+# common --lockfile_mode=error
+
+# Make sure to enable runfiles on Windows, since `bootcamp/EmitValues.java`
+# requires this to read the file from `SCRIPTS_JSON`.
+common --enable_runfiles
