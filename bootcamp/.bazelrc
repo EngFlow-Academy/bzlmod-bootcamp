@@ -1,1 +1,16 @@
-import ../.bazelrc
+# Select legacy `WORKSPACE` builds vs Bzlmod builds. Remove once Bazel 9 becomes
+# the minimum supported version, since it only supports Bzlmod.
+#
+# --enable_bzlmod defaults to `false` in Bazel 6 and `true` in Bazel 7.
+# --noenable_bzlmod ensures Bazel does _not_ create an empty MODULE.bazel file
+# when it doesn't already exist.
+#
+# --enable_workspace doesn't exist in Bazel 6. It defaults to `true` in Bazel 7
+# and `false` in Bazel 8.
+common --enable_bzlmod --noenable_workspace
+
+# --incompatible_use_plus_in_repo_names is available in Bazel >= 7.3.0 to help
+# with Windows performance issues under Bzlmod. It's not strictly necessary, but
+# may help ensure compatibility with Bazel 8, in which it defaults to `true`.
+# Remove once Bazel 8 becomes the minimum supported version.
+common --incompatible_use_plus_in_repo_names

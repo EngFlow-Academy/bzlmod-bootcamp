@@ -1,0 +1,36 @@
+module(name = "bzlmod_bootcamp")
+
+local_repository = use_repo_rule(
+    "@bazel_tools//tools/build_defs/repo:local.bzl",
+    "local_repository",
+)
+
+bazel_dep(name = "rules_java", version = "8.14.0")
+bazel_dep(name = "rules_proto", version = "7.0.2")
+bazel_dep(name = "protobuf", version = "29.0")
+
+local_repository(
+    name = "rules_magic",
+    path = "../rules_magic"
+)
+
+magic_config = use_extension(
+    "//extensions:rules_magic_config.bzl",
+    "magic_config",
+)
+use_repo(magic_config, "rules_magic_config")
+
+magic_config.settings(
+    versions = ["1.2.3", "4.5.6", "7.8.9", "10.11.12", "13.14.15"],
+)
+
+magic_leaflet = use_extension(
+    "//extensions:rules_magic_leaflet_repo.bzl",
+    "magic_leaflet",
+)
+use_repo(magic_leaflet, "rules_magic_leaflet")
+
+magic_toolchains = use_extension(
+    "//extensions:rules_magic_toolchains.bzl",
+    "magic_toolchains",
+)
