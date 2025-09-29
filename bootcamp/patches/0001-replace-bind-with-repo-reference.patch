@@ -1,0 +1,82 @@
+# Copyright 2025 EngFlow, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+commit d180a50bb947a0bdde9db46e1010f6e7b421e41e
+Author: Mike Bland <mbland@engflow.com>
+Date:   Thu Sep 25 12:27:06 2025 -0400
+
+    Replace //external target with repo reference
+    
+    Fixes the breakage from the previous commit and eliminates the now
+    unnecessary `native.bind()` call.
+    
+    The Bzlmod build now fails with the following under Bazel 8:
+    
+    ```txt
+    ERROR: .../external/rules_magic+/magic/magic.bzl:63:31:
+      Traceback (most recent call last):
+      File ".../external/rules_magic+/magic/extensions/toolchains.bzl",
+        line 20, column 27, in _magic_toolchains_impl
+          rules_magic_toolchains()
+      File ".../external/rules_magic+/magic/magic.bzl",
+        line 63, column 31, in rules_magic_toolchains
+          native.register_toolchains("//magic:all")
+    
+    Error in register_toolchains: register_toolchains() can only be used
+      while evaluating a WORKSPACE file
+    
+    ERROR: Analysis of target '//:default-values' failed; build aborted:
+      error evaluating module extension
+      @@rules_magic+//magic/extensions:toolchains.bzl%magic_toolchains
+    ```
+    
+    Under Bazel 7, the `ERROR:` lines are identical, but the "Error in
+    register toolchains:" line reads:
+    
+    ```txt
+    Error in register_toolchains: The native module can be accessed only
+      from a BUILD thread. Wrap the function in a macro and call it from a
+      BUILD file
+    ```
+    
+    This is because `register_toolchains()` can only appear in
+    `MODULE.bazel` under Bzlmod. `native.register_toolchains()` in a `.bzl`
+    file is only valid in a legacy `WORKSPACE` context.
+
+diff --git a/rules_magic/magic/private/setup_magic_spells_repositories.bzl b/rules_magic/magic/private/setup_magic_spells_repositories.bzl
+index f251476..a9a4a40 100644
+--- a/rules_magic/magic/private/setup_magic_spells_repositories.bzl
++++ b/rules_magic/magic/private/setup_magic_spells_repositories.bzl
+@@ -36,8 +36,3 @@ def setup_magic_spells_repositories(name = None):
+             name = repo_name,
+             spells_json = Label("//magic:private/spells/%s.json" % game),
+         )
+-
+-        native.bind(
+-            name = game + "_spells",
+-            actual = "@%s" % repo_name,
+-        )
+diff --git a/rules_magic/magic/private/setup_magic_toolchain.bzl b/rules_magic/magic/private/setup_magic_toolchain.bzl
+index 7d77fe9..5e322ec 100644
+--- a/rules_magic/magic/private/setup_magic_toolchain.bzl
++++ b/rules_magic/magic/private/setup_magic_toolchain.bzl
+@@ -30,7 +30,7 @@ def setup_magic_toolchain(
+         spells_json = None,
+         some_feature = ENABLE_SOME_FEATURE):
+     if spells_json == None and game in BUILTIN_GAMES:
+-        spells_json = "//external:%s_spells" % game
++        spells_json = "@rules_magic_spells_" + game
+ 
+     magic_toolchain(
+         name = name + "_impl",
