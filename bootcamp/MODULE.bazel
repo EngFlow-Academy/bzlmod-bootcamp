@@ -42,5 +42,10 @@ magic_toolchains = use_extension(
     "//extensions:rules_magic_toolchains.bzl",
     "magic_toolchains",
 )
+use_repo(
+    magic_toolchains,
+    "rules_magic_spells_enchanter",
+    "rules_magic_spells_spellbreaker",
+)
 
 register_toolchains("@rules_magic//toolchains:all")
