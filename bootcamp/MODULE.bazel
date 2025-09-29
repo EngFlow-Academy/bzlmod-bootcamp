@@ -30,6 +30,7 @@ git_repository(
     patch_args = ["-p2"],
     patches = [
         "//patches:0000-fix-rules-magic-leaflet-default-repo-target.patch",
+        "//patches:0001-replace-bind-with-repo-reference.patch",
     ],
     remote = "git@github.com:EngFlow-Academy/bzlmod-bootcamp.git",
     strip_prefix = "rules_magic",
