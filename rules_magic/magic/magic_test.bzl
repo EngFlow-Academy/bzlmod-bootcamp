@@ -45,7 +45,7 @@ def _magic_test_impl(ctx):
             "{{data_files}}": "\n".join([
                 "\"%s\"" % ctx.expand_location(d) for d in ctx.attr.data
             ]),
-            "{{test_framework_path}}": ctx.file._test_framework.path,
+            "{{test_framework_path}}": ctx.file._test_framework.short_path,
         },
     )
 
