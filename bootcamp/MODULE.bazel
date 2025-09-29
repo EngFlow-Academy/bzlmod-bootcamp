@@ -66,6 +66,8 @@ use_extension(
     "magic_toolchains",
 )
 
+register_toolchains("@rules_magic//magic:all")
+
 # Dev deps, kept to maintain parity with deps.bzl. Also, since Bazel depends on
 # these, this helps minimize MODULE.bazel.lock bloat and churn.
 bazel_dep(name = "rules_cc", version = "0.1.1", dev_dependency = True)
