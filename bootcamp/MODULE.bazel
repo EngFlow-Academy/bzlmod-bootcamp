@@ -1,17 +1,24 @@
 module(name = "bzlmod_bootcamp")
 
-local_repository = use_repo_rule(
-    "@bazel_tools//tools/build_defs/repo:local.bzl",
-    "local_repository",
+git_repository = use_repo_rule(
+    "@bazel_tools//tools/build_defs/repo:git.bzl",
+    "git_repository",
 )
 
 bazel_dep(name = "rules_java", version = "8.14.0")
 bazel_dep(name = "rules_proto", version = "7.0.2")
 bazel_dep(name = "protobuf", version = "29.0")
 
-local_repository(
+git_repository(
     name = "rules_magic",
-    path = "../rules_magic"
+    patches = [
+        "//patches:0000-fix-rules-magic-leaflet-default-repo-target.patch",
+    ],
+    # Under Bazel 8, `patch_strip = 2` would work.
+    patch_args = ["-p2"],
+    remote = "git@github.com:EngFlow-Academy/bzlmod-bootcamp.git",
+    strip_prefix = "rules_magic",
+    tag = "v0.0.0-own-repo-names",
 )
 
 magic_config = use_extension(

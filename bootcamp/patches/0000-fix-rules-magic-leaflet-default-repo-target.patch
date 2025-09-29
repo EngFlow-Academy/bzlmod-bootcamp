@@ -1,0 +1,104 @@
+commit 5d1840e6b51fcd5014122ab927d251bfd47c91a2
+Author: Mike Bland <mbland@engflow.com>
+Date:   Tue Sep 2 17:07:53 2025 -0400
+
+    Fix default @rules_magic_leaflet_repo target
+    
+    Fixes the breakage in `@rules_magic_leaflet` from the previous commit by
+    using two mechanisms for generating a default target name in a
+    repository rule.
+    
+    - Bazel 8.1.1 added `repository_ctx.original_name` to facilitate the
+      generation of default repo target names.
+    
+    - For earlier Bazels, the wrapper macro and `default_target_name`
+      attribute pass through the original repo name for when
+      `repository_ctx.original_name` isn't available.
+    
+    Using both for now provides backwards and forward compatibility across
+    Bazel versions while avoiding the need for parsing the canonical repo
+    name format. The canonical repo name format has changed several times,
+    making this a very practical concern.
+    
+    For more background, see:
+    
+    - https://github.com/bazelbuild/bazel/issues/24467
+    - https://github.com/bazelbuild/bazel/pull/25121
+    
+    And as for why we recommend using Bazel 8.1.1 or later, instead of 8.1.0
+    when `repository_ctx.original_name` first appeared:
+    
+    - https://github.com/bazelbuild/bazel/issues/25286
+    
+    ---
+    
+    However, the build now breaks with:
+    
+    ```txt
+    ERROR: external/rules_magic+/toolchains/BUILD:17:22:
+      no such package '@@rules_magic+//external':
+      BUILD file not found in directory 'external' of external repository
+      @@rules_magic+. Add a BUILD file to a directory to mark it as a
+      package. and referenced by
+      '@@rules_magic+//toolchains:default_settings_toolchain_impl'
+    
+    ERROR: Analysis of target '//:default-values' failed; build aborted:
+      Analysis failed
+    ```
+    
+    This is because `native.bind` doesn't work under Bzlmod. We're not yet
+    hitting the error indicating that `native.bind` is no longer available,
+    but that the artifical `//external` package no longer exists.
+
+diff --git a/rules_magic/magic/magic.bzl b/rules_magic/magic/magic.bzl
+index 740e157..d2d4742 100644
+--- a/rules_magic/magic/magic.bzl
++++ b/rules_magic/magic/magic.bzl
+@@ -16,8 +16,16 @@ magic_test = _magic_test
+ rules_magic_deps = _rules_magic_deps
+ rules_magic_spells_repositories = _rules_magic_spells_repositories
+ 
+-def rules_magic_leaflet_repo():
+-    _magic_leaflet_repo(name = "rules_magic_leaflet")
++# Replace with an assignment from _magic_leaflet_repo once all supported
++# Bazels have repository_ctx.original_name.
++def rules_magic_leaflet_repo(**kwargs):
++    name = kwargs.pop("name", "rules_magic_leaflet")
++
++    _magic_leaflet_repo(
++        name = name,
++        default_target_name = kwargs.pop("default_target_name", name),
++        **kwargs
++    )
+ 
+ def rules_magic_toolchains():
+     _rules_magic_spells_repositories()
+diff --git a/rules_magic/magic/private/leaflet_repo.bzl b/rules_magic/magic/private/leaflet_repo.bzl
+index 5b0b163..3a91655 100644
+--- a/rules_magic/magic/private/leaflet_repo.bzl
++++ b/rules_magic/magic/private/leaflet_repo.bzl
+@@ -23,16 +23,23 @@ magic_leaflet(
+ _RULES_MAGIC_REPO = Label("//:all").repo_name
+ 
+ def _magic_leaflet_repo_impl(rctx):
++    # Replace with rctx.original_name once all supported Bazels have it.
++    repo_name = getattr(rctx, "original_name", rctx.attr.default_target_name)
++
+     rctx.file("leaflet.txt", _LEAFLET_CONTENT, executable = False)
+     rctx.file(
+         "BUILD",
+         _BUILD_CONTENT.format(
+             rules_magic_repo = _RULES_MAGIC_REPO,
+-            leaflet_name = rctx.name,
++            leaflet_name = repo_name,
+         ),
+         executable = False,
+     )
+ 
+ magic_leaflet_repo = repository_rule(
+     implementation = _magic_leaflet_repo_impl,
++    attrs = {
++        # Remove once all supported Bazels have repository_ctx.original_name.
++        "default_target_name": attr.string(mandatory = True),
++    }
+ )
