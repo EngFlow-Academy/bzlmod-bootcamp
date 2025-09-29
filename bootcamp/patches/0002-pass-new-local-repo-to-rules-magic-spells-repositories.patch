@@ -1,0 +1,35 @@
+commit 69a9e759dfbbbd79c8fbf211089d75165f278054
+Author: Mike Bland <mbland@engflow.com>
+Date:   Thu Sep 25 12:42:20 2025 -0400
+
+    Fix toolchains module extension for Bzlmod
+    
+    The original toolchains macros still work with legacy `WORKSPACE` builds
+    in Bazel 6, 7, and 8.
+    
+    Note that the `@bazel_tools//tools/build_defs/repo:local.bzl` file is
+    _not_ available in Bazel 6. This is another reason why we don't support
+    Bazel 6 Bzlmod builds.
+
+diff --git a/rules_magic/toolchains/repositories.bzl b/rules_magic/toolchains/repositories.bzl
+index a6b8aca..ef521b7 100644
+--- a/rules_magic/toolchains/repositories.bzl
++++ b/rules_magic/toolchains/repositories.bzl
+@@ -12,12 +12,15 @@ alias(
+ )
+ """
+ 
+-def rules_magic_spells_repositories():
++def rules_magic_spells_repositories(new_local_repository = None):
++    if new_local_repository == None:
++        new_local_repository = native.new_local_repository
++
+     for game in KNOWN_GAMES:
+         repo_name = "rules_magic_spells_" + game
+ 
+         # This stands in for a remote http_archive.
+-        native.new_local_repository(
++        new_local_repository(
+             name = repo_name,
+             path = "../spells/" + game,
+             build_file_content = _BUILD_FILE.format(repo_name = repo_name),

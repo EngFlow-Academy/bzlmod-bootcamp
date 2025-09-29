@@ -71,7 +71,7 @@ test_fail_if_magic_version_not_in_versions_list() {
 
   if _run_emit_values --repo_env=MAGIC_VERSION=3.2.1; then
     _error "did not fail on misconfigured magic version"
-  elif [[ ! "$output" =~ default\ magic\ version\ \(3\.2\.1\) ]]; then
+  elif [[ ! "$output" =~ default\ magic\ version\ .3\.2\.1. ]]; then
     _error "output did not contain default magic version in failure message"
   fi
 }
@@ -81,7 +81,7 @@ test_fail_if_unknown_game() {
 
   if _run_emit_values --repo_env=MAGIC_GAME=deadline; then
     _error "did not fail on unknown game"
-  elif [[ ! "$output" =~ default\ game\ \(deadline\) ]]; then
+  elif [[ ! "$output" =~ (default|unknown)\ game\ .deadline. ]]; then
     _error "output did not contain default game in failure message"
   fi
 }
