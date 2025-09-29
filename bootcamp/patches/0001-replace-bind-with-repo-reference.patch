@@ -1,0 +1,58 @@
+commit df6bf840aa190b70df4c660b83cbed671554d0fc
+Author: Mike Bland <mbland@engflow.com>
+Date:   Thu Sep 25 12:27:06 2025 -0400
+
+    Replace //external target with repo reference
+    
+    Fixes the breakage from the previous commit and eliminates the now
+    unnecessary `native.bind()` call.
+    
+    The Bzlmod build now fails with:
+    
+    ```txt
+    ERROR: external/rules_magic+/toolchains/repositories.bzl:20:36:
+      Traceback (most recent call last):
+      File "external/rules_magic+/magic/extensions/toolchains.bzl",
+        line 6, column 27, in _magic_toolchains_impl
+          rules_magic_toolchains()
+      File "external/rules_magic+/magic/magic.bzl",
+        line 31, column 37, in rules_magic_toolchains
+          _rules_magic_spells_repositories()
+      File "external/rules_magic+/toolchains/repositories.bzl",
+        line 20, column 36, in rules_magic_spells_repositories
+          native.new_local_repository(
+    
+    Error in new_local_repository: repository rules can only be used while
+    evaluating a WORKSPACE file
+    
+    ERROR: Analysis of target '//:default-values' failed; build aborted:
+      error evaluating module extension
+      @@rules_magic+//magic/extensions:toolchains.bzl%magic_toolchains
+    ```
+
+diff --git a/rules_magic/toolchains/repositories.bzl b/rules_magic/toolchains/repositories.bzl
+index 047f605..a6b8aca 100644
+--- a/rules_magic/toolchains/repositories.bzl
++++ b/rules_magic/toolchains/repositories.bzl
+@@ -22,8 +22,3 @@ def rules_magic_spells_repositories():
+             path = "../spells/" + game,
+             build_file_content = _BUILD_FILE.format(repo_name = repo_name),
+         )
+-
+-        native.bind(
+-            name = game + "_spells",
+-            actual = "@%s" % repo_name,
+-        )
+diff --git a/rules_magic/toolchains/toolchains.bzl b/rules_magic/toolchains/toolchains.bzl
+index 72b4b66..651957c 100644
+--- a/rules_magic/toolchains/toolchains.bzl
++++ b/rules_magic/toolchains/toolchains.bzl
+@@ -53,7 +53,7 @@ def setup_magic_toolchain(
+         name = name + "_impl",
+         magic_version = magic_version,
+         game = game,
+-        spells_json = "//external:%s_spells" % game,
++        spells_json = "@rules_magic_spells_" + game,
+         some_feature = some_feature,
+     )
+ 

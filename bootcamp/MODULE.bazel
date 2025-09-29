@@ -13,6 +13,7 @@ git_repository(
     name = "rules_magic",
     patches = [
         "//patches:0000-fix-rules-magic-leaflet-default-repo-target.patch",
+        "//patches:0001-replace-bind-with-repo-reference.patch",
     ],
     # Under Bazel 8, `patch_strip = 2` would work.
     patch_args = ["-p2"],
