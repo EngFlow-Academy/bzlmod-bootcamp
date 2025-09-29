@@ -62,7 +62,7 @@ def _magic_test_impl(ctx):
             "{{src_paths}}": "\n".join(
                 ["\"%s\"" % f.path for f in ctx.files.srcs],
             ),
-            "{{test_framework_path}}": ctx.file._test_framework.path,
+            "{{test_framework_path}}": ctx.file._test_framework.short_path,
         },
     )
 
