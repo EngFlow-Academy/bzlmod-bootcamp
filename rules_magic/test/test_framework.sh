@@ -6,6 +6,9 @@ set -euo pipefail
 NC='\033[0m'
 GREEN='\033[0;32m'
 RED='\033[0;31m'
+BOLD='\033[1m'
+BOLD_GREEN='\033[1;32m'
+BOLD_RED='\033[1;31m'
 
 run_test_func() {
   set -euo pipefail
@@ -36,9 +39,7 @@ run_test_func() {
 run_test_file() {
     local src_path="$1"
     local test_only="${RULES_MAGIC_TEST_ONLY:-}"
-
-    echo "Executing: ${src_path}"
-    . "$src_path"
+    local test_funcs=()
 
     while IFS= read -r line; do
       if [[ "$line" =~ ^(_?test_[A-Za-z0-9_]+)\(\)\ ?\{$ ]]; then
@@ -47,13 +48,28 @@ run_test_file() {
         if [[ -n "$test_only" && "$test_only" != "$test_func" ]]; then
           continue
         fi
-        : $((++NUM_TESTS))
-
-        if ! run_test_func "$test_func"; then
-          FAILURES+=("${test_func} (${src_path})")
-        fi
+        test_funcs+=("$test_func")
       fi
     done <"$src_path"
+
+    if [[ "${#test_funcs[@]}" -eq 0 ]]; then
+      return
+    fi
+
+    echo -e $'\n'"${BOLD}File: ${src_path}${NC}"
+    . "$src_path"
+
+    for test_func in "${test_funcs[@]}"; do
+      : $((++NUM_TESTS))
+
+      if ! run_test_func "$test_func"; then
+        FAILURES+=("${test_func} (${src_path})")
+
+        if [[ -z "${RULES_MAGIC_TEST_KEEP_GOING:-}" ]]; then
+          return 1
+        fi
+      fi
+    done
 }
 
 run_test_files() {
@@ -61,20 +77,23 @@ run_test_files() {
   local FAILURES=()
 
   for src_path in "$@"; do
-    run_test_file "${src_path}"
+    if ! run_test_file "${src_path}"; then
+      break
+    fi
   done
 
   num_failures="${#FAILURES[@]}"
 
   if [[ "${#FAILURES[@]}" -eq 0 ]]; then
-    echo -e $'\n'"${GREEN}${NUM_TESTS} test(s) passed${NC}"
+    echo -e $'\n'"${BOLD_GREEN}${NUM_TESTS} test(s) passed${NC}"
     return
   fi
 
-  echo -e $'\n'"${RED}${num_failures} of ${NUM_TESTS} test(s) failed:${NC}"
+  echo -e $'\n'"${BOLD_RED}${num_failures} of ${NUM_TESTS} test(s) failed:"
 
   for failed in "${FAILURES[@]}"; do
-    echo -e "  ${RED}${failed}${NC}"
+    echo -e "  ${RED}${failed}"
   done
+  echo -e "${NC}"
   exit "${#FAILURES[@]}"
 }
