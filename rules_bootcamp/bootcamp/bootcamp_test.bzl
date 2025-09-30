@@ -11,8 +11,40 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# ---
+#
+# Copied `_expand_part`, `expand_vars`, and `run_environment_info` from:
+# - https://github.com/bazel-contrib/rules_scala/blob/v7.1.4/scala/private/phases/phase_runenvironmentinfo_provider.bzl
 
 """Implementation of the bootcamp_test rule."""
+
+def _expand_part(ctx, attr_name, part, targets, additional_vars):
+    """Perform `$(location)` and "Make variable" substitution for `expand_vars`
+    """
+    expanded = ctx.expand_location(part, targets)
+    return ctx.expand_make_variables(attr_name, expanded, additional_vars)
+
+def expand_vars(ctx, attr_name, value, targets, additional_vars):
+    """Perform `$(location)` and "Make variable" substitution on an attribute
+    """
+    return "$".join([
+        _expand_part(ctx, attr_name, s, targets, additional_vars)
+        for s in value.split("$$")
+    ])
+
+def run_environment_info(ctx):
+    """Create a RunEnvironmentInfo provider from `ctx.attr.env` values"""
+    # Replace `[]` with `getattr(ctx.attr, "data", [])` later in the workshop.
+    targets = []
+
+    return RunEnvironmentInfo(
+        environment = {
+            k: expand_vars(ctx, "env", v, targets, ctx.var)
+            for k, v in ctx.attr.env.items()
+        },
+        inherited_environment = getattr(ctx.attr, "env_inherit", []),
+    )
 
 def _bootcamp_test_impl(ctx):
     executable = ctx.actions.declare_file(ctx.label.name)
@@ -44,6 +76,7 @@ def _bootcamp_test_impl(ctx):
             executable = executable,
             runfiles = runfiles,
         ),
+        run_environment_info(ctx),
     ]
 
 bootcamp_test = rule(
@@ -55,6 +88,8 @@ bootcamp_test = rule(
         "srcs": attr.label_list(allow_files = True),
         "deps": attr.label_list(),
         "data": attr.string_list(),
+        "env": attr.string_dict(),
+        "env_inherit": attr.string_list(),
         "_test_framework": attr.label(
             allow_single_file = True,
             default = "//test:test_framework.sh",

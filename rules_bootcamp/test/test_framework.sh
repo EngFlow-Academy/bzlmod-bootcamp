@@ -17,7 +17,7 @@
 # ---
 #
 # Inspired by:
-# - https://github.com/bazel-contrib/rules_scala/blob/v7.1.3/test/shell/test_runner.sh
+# - https://github.com/bazel-contrib/rules_scala/blob/v7.1.4/test/shell/test_runner.sh
 
 set -euo pipefail
 
