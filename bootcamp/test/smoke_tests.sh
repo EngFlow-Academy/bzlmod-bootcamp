@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+#
 # Copyright 2025 EngFlow, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,5 +19,7 @@ test_build() {
 }
 
 test_magic_tests() {
-  bazel test --test_output=all //...
+  bazel test --test_output=all \
+    --test_env=RULES_MAGIC_TEST_VERBOSE="${RULES_MAGIC_TEST_VERBOSE:-}" \
+    //...
 }
