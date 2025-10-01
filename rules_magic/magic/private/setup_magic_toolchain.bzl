@@ -43,5 +43,5 @@ def setup_magic_toolchain(
     native.toolchain(
         name = name,
         toolchain = ":" + name + "_impl",
-        toolchain_type = ":toolchain_type",
+        toolchain_type = Label(":toolchain_type"),
     )

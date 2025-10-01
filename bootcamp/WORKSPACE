@@ -77,6 +77,16 @@ load("@rules_magic//magic:leaflet_repo.bzl", "rules_magic_leaflet_repository")
 
 rules_magic_leaflet_repository()
 
-load("@rules_magic//magic:toolchains.bzl", "rules_magic_toolchains")
+load(
+    "@rules_magic//magic:toolchains.bzl",
+    "magic_toolchains",
+    "rules_magic_register_toolchains",
+)
 
-rules_magic_toolchains()
+magic_toolchains(
+    enchanter = True,
+    sorcerer = True,
+    spellbreaker = True,
+)
+
+rules_magic_register_toolchains()
