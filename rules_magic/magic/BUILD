@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load(":magic.bzl", "magic_library", "setup_magic_toolchain")
-load(":private/setup_magic_spells_repositories.bzl", "BUILTIN_GAMES")
+load(":magic.bzl", "magic_library")
 
 exports_files(
     [
@@ -33,14 +32,7 @@ magic_library(
 #   ToolchainInfo(
 #       magic_info = MagicInfo(...),
 #   )
-toolchain_type(name = "toolchain_type")
-
-setup_magic_toolchain(name = "default_settings_toolchain")
-
-[
-    setup_magic_toolchain(
-        name = game + "_toolchain",
-        game = game,
-    )
-    for game in BUILTIN_GAMES
-]
+toolchain_type(
+    name = "toolchain_type",
+    visibility = ["//visibility:public"],
+)

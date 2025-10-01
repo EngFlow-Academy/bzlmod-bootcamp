@@ -12,21 +12,60 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Toolchain macros."""
+"""Macro to instantiate @rules_magic_toolchains"""
 
-load(
-    ":private/setup_magic_spells_repositories.bzl",
-    "setup_magic_spells_repositories",
-)
+load("@rules_magic_config//:config.bzl", "GAME")
+load(":magic_spells_repository.bzl", "magic_spells_repository")
+load(":magic_toolchains_repository.bzl", "magic_toolchains_repository")
 
-def rules_magic_toolchains(name = None):
-    """Instantiates toolchain dependencies and registers builtin toolchains.
+DEFAULT_TOOLCHAINS_REPO_NAME = "rules_magic_toolchains"
+
+def magic_toolchains(
+        name = DEFAULT_TOOLCHAINS_REPO_NAME,
+        enchanter = False,
+        sorcerer = False,
+        spellbreaker = False,
+        default_game = GAME):
+    """Configure and instantiate the toolchains repo and its dependency repos.
+
+    Args:
+        name: name of the toolchain repo containing the configured toolchains
+        enchanter: enable the Enchanter game's toolchain
+        sorcerer: enable the Sorcerer game's toolchain
+        spellbreaker: enable the Spellbreaker game's toolchain
+        default_game: determines which game's toolchain is the default
+    """
+    games = []
+
+    if enchanter:
+        games.append("enchanter")
+    if sorcerer:
+        games.append("sorcerer")
+    if spellbreaker:
+        games.append("spellbreaker")
+
+    for game in games:
+        magic_spells_repository(
+            name = "rules_magic_spells_" + game,
+            spells_json = Label("//magic:private/spells/%s.json" % game),
+        )
+
+    magic_toolchains_repository(
+        name = DEFAULT_TOOLCHAINS_REPO_NAME,
+        default_game = default_game,
+        games_to_spells_repo = {
+            game: "@rules_magic_spells_" + game
+            for game in games
+        },
+    )
+
+def rules_magic_register_toolchains(name = DEFAULT_TOOLCHAINS_REPO_NAME):
+    """Registers all toolchains in the rules_magic toolchains repository.
 
     For legacy WORKSPACE builds only. For Bzlmod, use
     //magic/extensions:toolchains.bzl.
 
     Args:
-        name: unused; defined to satisfy buildifier
+        name: the repository containing toolchains to register
     """
-    setup_magic_spells_repositories(name = name)
-    native.register_toolchains("//magic:all")
+    native.register_toolchains("@%s//...:all" % name)
