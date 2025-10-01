@@ -63,6 +63,16 @@ load("@rules_python//python:repositories.bzl", "py_repositories")
 
 py_repositories()
 
-load("//magic:toolchains.bzl", "rules_magic_toolchains")
+load(
+    "//magic:toolchains.bzl",
+    "magic_toolchains",
+    "rules_magic_register_toolchains",
+)
 
-rules_magic_toolchains()
+magic_toolchains(
+    enchanter = True,
+    sorcerer = True,
+    spellbreaker = True,
+)
+
+rules_magic_register_toolchains()

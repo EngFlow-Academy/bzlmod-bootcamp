@@ -73,7 +73,7 @@ test_uses_different_toolchain_based_on_game() {
 }
 
 test_uses_toolchain_from_extra_toolchains_command_line_option() {
-  local toolchain='@rules_magic//magic:spellbreaker_toolchain'
+  local toolchain='@rules_magic_toolchains//spells:spellbreaker_toolchain'
   local output
   _run_emit_values "--extra_toolchains=${toolchain}"
 

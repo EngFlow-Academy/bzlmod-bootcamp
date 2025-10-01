@@ -26,6 +26,7 @@ load(
     "CONFIG_ENVIRON",
     _magic_config = "magic_config",
 )
+load(":private/bzlmod.bzl", "root_module_settings")
 
 _tag_classes = {
     "settings": tag_class(
@@ -35,15 +36,7 @@ _tag_classes = {
 }
 
 def _magic_config_impl(module_ctx):
-    settings = dict(CONFIG_DEFAULTS)
-
-    for mod in module_ctx.modules:
-        if mod.is_root:
-            # For simplicitly, only read the one tag. See `rules_scala`'s
-            # scala/extensions/config.bzl and scala/private/macros/bzlmod.bzl
-            # for an example using more robust macros.
-            settings = {k: getattr(mod.tags.settings[0], k) for k in settings}
-            break
+    settings = root_module_settings(module_ctx, CONFIG_DEFAULTS)
 
     menv = module_ctx.os.environ
     game = menv.get("MAGIC_GAME", settings["game"])
