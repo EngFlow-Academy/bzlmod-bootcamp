@@ -12,16 +12,19 @@ alias(
 )
 """
 
-def rules_magic_spells_repositories(new_local_repository = None):
-    if new_local_repository == None:
-        new_local_repository = native.new_local_repository
+def rules_magic_spells_repository(name, new_local_repository):
+    """Instantiate a spells repository for a specific game."""
+    if name not in KNOWN_GAMES:
+        fail("unknown game '{game}'; known games are: {known_games}".format(
+            game = name,
+            known_games = ", ".join(KNOWN_GAMES),
+        ))
 
-    for game in KNOWN_GAMES:
-        repo_name = "rules_magic_spells_" + game
+    repo_name = "rules_magic_spells_" + name
 
-        # This stands in for a remote http_archive.
-        new_local_repository(
-            name = repo_name,
-            path = "../spells/" + game,
-            build_file_content = _BUILD_FILE.format(repo_name = repo_name),
-        )
+    # This stands in for a remote http_archive.
+    new_local_repository(
+        name = repo_name,
+        path = "../spells/" + name,
+        build_file_content = _BUILD_FILE.format(repo_name = repo_name),
+    )

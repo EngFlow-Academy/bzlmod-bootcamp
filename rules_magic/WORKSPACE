@@ -51,6 +51,17 @@ magic_config(
     versions = ["1.2.3", "4.5.6", "7.8.9"],
 )
 
-load("//toolchains:toolchains.bzl", "rules_magic_toolchains")
+load(
+    "@rules_magic//magic:magic_toolchains.bzl",
+    "magic_toolchains",
+    "rules_magic_register_toolchains",
+)
 
-rules_magic_toolchains()
+magic_toolchains(
+    enchanter = True,
+    sorcerer = True,
+    spellbreaker = True,
+)
+
+rules_magic_register_toolchains()
+

@@ -61,6 +61,16 @@ magic_config(
     games = ["enchanter", "sorcerer", "spellbreaker"],
 )
 
-load("@rules_magic//toolchains:toolchains.bzl", "rules_magic_toolchains")
+load(
+    "@rules_magic//magic:magic_toolchains.bzl",
+    "magic_toolchains",
+    "rules_magic_register_toolchains",
+)
 
-rules_magic_toolchains()
+magic_toolchains(
+    enchanter = True,
+    sorcerer = True,
+    spellbreaker = True,
+)
+
+rules_magic_register_toolchains()

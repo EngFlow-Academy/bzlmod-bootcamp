@@ -21,3 +21,17 @@ magic_config = use_extension(
 magic_config.settings(
     versions = ["1.2.3", "4.5.6", "7.8.9"],
 )
+
+magic_toolchains = use_extension(
+    "@rules_magic//magic/extensions:toolchains.bzl",
+    "magic_toolchains",
+)
+
+# Required for use with `--extra_toolchains`.
+use_repo(magic_toolchains, "rules_magic_toolchains")
+
+magic_toolchains.settings(
+    enchanter = True,
+    sorcerer = True,
+    spellbreaker = True,
+)

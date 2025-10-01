@@ -8,6 +8,7 @@ load(
     "DEFAULT_MAGIC_VERSION",
     _magic_config = "magic_config",
 )
+load("//magic/extensions:private/bzlmod.bzl", "root_module_settings")
 
 _settings_defaults = {
     "version": DEFAULT_MAGIC_VERSION,
@@ -44,15 +45,7 @@ _tag_classes = {
 }
 
 def _magic_config_impl(module_ctx):
-    settings = dict(_settings_defaults)
-
-    for mod in module_ctx.modules:
-        if mod.is_root:
-            # For simplicitly, only read the one tag. See `rules_scala`'s
-            # scala/extensions/config.bzl and scala/private/macros/bzlmod.bzl
-            # for an example using more robust macros.
-            settings = {k: getattr(mod.tags.settings[0], k) for k in settings}
-            break
+    settings = root_module_settings(module_ctx, _settings_defaults)
 
     menv = module_ctx.os.environ
     version = menv.get("MAGIC_VERSION", settings["version"])

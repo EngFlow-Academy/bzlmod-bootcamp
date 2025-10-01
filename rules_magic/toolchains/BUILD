@@ -1,7 +1,4 @@
 """Toolchain definitions"""
-load(":repositories.bzl", "KNOWN_GAMES")
-load(":toolchains.bzl", "setup_magic_toolchain")
-
 package(default_visibility = ["//visibility:public"])
 
 exports_files(["providers.bzl"])
@@ -13,13 +10,3 @@ exports_files(["providers.bzl"])
 #       magic_info = MagicInfo(...),
 #   )
 toolchain_type(name = "toolchain_type")
-
-setup_magic_toolchain(name = "default_settings_toolchain")
-
-[
-    setup_magic_toolchain(
-        name = game + "_toolchain",
-        game = game,
-    )
-    for game in KNOWN_GAMES
-]

@@ -36,12 +36,17 @@ magic_toolchains = use_extension(
     "//magic/extensions:toolchains.bzl",
     "magic_toolchains",
 )
+use_repo(magic_toolchains, "rules_magic_toolchains")
 
-use_repo(
-    magic_toolchains,
-    "rules_magic_spells_enchanter",
-    "rules_magic_spells_sorcerer",
-    "rules_magic_spells_spellbreaker",
+register_toolchains("@rules_magic_toolchains//...:all")
+
+dev_toolchains = use_extension(
+    "//magic/extensions:toolchains.bzl",
+    "magic_toolchains",
+    dev_dependency = True,
 )
-
-register_toolchains("//toolchains:all")
+dev_toolchains.settings(
+    enchanter = True,
+    sorcerer = True,
+    spellbreaker = True,
+)
