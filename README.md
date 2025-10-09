@@ -5,11 +5,22 @@ demonstrates how to migrate [Bazel][] projects using the [legacy WORKSPACE][]
 system for configuring [external dependencies][] to the new [Bazel modules][]
 system, a.k.a. __Bzlmod__.
 
+It also shows how to:
+
+- Solve common problems that arise when migrating to newer Bazel versions
+- Implement the "hub repo" pattern to better encapsulate toolchains and their
+    dependencies
+- Maintain compatibility with a wide range of Bazel versions and dependency
+    versions
+- Write and run tests to validate rule behaviors, including failure behaviors
+- Write and run tests to validate version compatibility contracts
+
 ## Rationale
 
 Bzlmod is available in Bazel 7 and 8, and [is the only system available in the
 upcoming Bazel 9 release][bzlmod-only]. In fact, the latest [rolling releases of
-Bazel][rolling] have already removed legacy `WORKSPACE` support, so projects must already fully support Bzlmod to use them.
+Bazel][rolling] have already removed legacy `WORKSPACE` support, so projects
+must already fully support Bzlmod to use them.
 
 _Note: [Bzlmod is available to a limited extent in Bazel 6][bzlmod-bazel-6], but
 it's missing several important features, such as [use_repo_rule][]. It's worth
@@ -17,15 +28,15 @@ migrating to at least Bazel 7 before using it._
 
 ## Structure
 
-This [git][] repository contains two separate Bazel repositories:
+This [Git repository][] contains two separate [Bazel repositories][]:
 
 - [bootcamp][]: A repository that depends upon `rules_magic`
 - [rules_magic][]: A rule set repository reminiscent of [FrobozzCo
   International][] products
 
-Run your IDE from the root of this `git` repository. However, __Bazel
-commands for this workshop will run in either the [bootcamp][] or
-[rules_magic][] Bazel repositories.__
+Run your IDE from the root of this `bzlmod-bootcamp` Git repository. However,
+__Bazel commands for this workshop will run in the [bootcamp][] Bazel
+repository.__
 
 ## Topics
 
@@ -72,7 +83,7 @@ your own projects, however unique the details of those challenges may be.
 
 ## Prerequisites
 
-- Familiarity with Bazel
+- Familiarity with [Bazel][]
 - Some familarity with the legacy `WORKSPACE` external dependency configuration
   system and [how it compares to Bzlmod][workspace-vs-bzlmod]
 
@@ -85,6 +96,45 @@ your own projects, however unique the details of those challenges may be.
     [Xcode][] on macOS, or [msvc][] or [clang][] on Windows
   - an IDE of choice, such as [Visual Studio Code][] (ideally with
     [Vim keybindings][])
+
+## Branches
+
+These branches are listed in reverse chronological order, with each branch based
+on the one below it, with the following exception:
+
+- The `bzlmod` branch is based on the `own-repo-names` branch, the same as
+    `bzlmod-client-patches`.
+
+- `bzlmod` shows how to update the [rules_magic][] rule set repository to make
+    it Bzlmod compatible. This is the preferred migration path.
+
+- `bzlmod-client-patches` shows how to update the [bootcamp][] repository to
+    make it Bzlmod compatible when `rules_magic` _is not_ itself Bzlmod
+    compatible. This involves creating patches and module extensions for
+    `rules_magic` within the `bootcamp` repository/Bazel module. This is not the
+    preferred migration path, but demonstrates how a client repository can adapt
+    a non-Bzlmod compatible dependency to build under Bzlmod.
+
+It's helpful to view the branch history in your Git commit history viewer of
+choice, such as [gitk][] or [tig][]. The summary lines in the commit history
+list provide a good overview of the migration process and the individual steps
+involved. Each full commit message contains extensive descriptions,
+explanations, and relevant links for that particular migration step.
+
+Most of the changes from `bazel-7` and the branches based on it are orthogonal,
+backwards compatible, and can happen in almost any order.
+
+| Branch | Bazel versions | Legacy `WORKSPACE` | Bzlmod |
+| :-: | :-: | :-: | :-: |
+| `compatibility` | 6, 7, 8, `rolling`, `last_green` | &#x2705; | &#x2705; |
+| `toolchains` | 6, 7, 8, `rolling`, `last_green` | &#x2705; | &#x2705; |
+| `bazel-9` | 6, 7, 8, `rolling`, `last_green` | &#x2705; | &#x2705; |
+| `bzlmod` | 6, 7, 8 | &#x2705; | &#x2705; |
+| `bzlmod-client-patches` | 6, 7, 8 | &#x2705; | &#x2705; |
+| `own-repo-names` | 6, 7, 8 | &#x2705; | |
+| `bazel-8` | 6, 7, 8 | &#x2705; | |
+| `bazel-7` | 6, 7 | &#x2705; | |
+| `main` | 6 | &#x2705; | |
 
 [Bazel]: https://bazel.build/
 [Bazel modules]: https://bazel.build/external/module
@@ -105,6 +155,8 @@ your own projects, however unique the details of those challenges may be.
 [clang]: https://clang.llvm.org/
 [gcc]: https://gcc.gnu.org/
 [git]: https://git-scm.com/
+[git repository]: https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-repository
+[Bazel repositories]: https://bazel.build/concepts/build-ref#repositories
 [msvc]: https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022
 [rolling]: https://bazel.build/release/rolling
 [rules_magic]: ./rules_magic/
@@ -112,3 +164,5 @@ your own projects, however unique the details of those challenges may be.
 [scala-bzlmod]: https://github.com/bazel-contrib/rules_scala/issues/1482
 [use_repo_rule]: https://bazel.build/rules/lib/globals/module#use_repo_rule
 [workspace-vs-bzlmod]: https://blog.engflow.com/2025/01/16/migrating-to-bazel-modules-aka-bzlmod---module-extensions/#module-extensions
+[gitk]: https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Graphical-Interfaces.html#_gitk_and_git_gui
+[tig]: https://jonas.github.io/tig/
