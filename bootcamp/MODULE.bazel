@@ -14,6 +14,12 @@
 
 module(name = "bzlmod_bootcamp")
 
+bazel_dep(name = "latest_dependencies")
+local_path_override(
+    module_name = "latest_dependencies",
+    path = "../latest_dependencies",
+)
+
 bazel_dep(name = "rules_magic")
 local_path_override(
     module_name = "rules_magic",
@@ -59,5 +65,5 @@ magic_toolchains.settings(
 
 # Dev deps, kept to maintain parity with deps.bzl. Also, since Bazel depends on
 # these, this helps minimize MODULE.bazel.lock bloat and churn.
-bazel_dep(name = "rules_cc", version = "0.2.11", dev_dependency = True)
-bazel_dep(name = "rules_python", version = "1.4.1", dev_dependency = True)
+bazel_dep(name = "rules_cc", version = "0.2.14", dev_dependency = True)
+bazel_dep(name = "rules_python", version = "1.6.3", dev_dependency = True)

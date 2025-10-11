@@ -34,7 +34,23 @@ magic_config(
     ],
 )
 
-load("@rules_magic//magic:deps.bzl", "rules_magic_deps")
+# Normally one would _not_ reach in and use the same dev deps; one would rather
+# define one's own. We're doing it here for expediency, since this is only a
+# training project.
+#
+# Comes first to ensure the newest versions of rules_cc and rules_python.
+load("@rules_magic//magic:private/dev_deps.bzl", "rules_magic_dev_deps")
+
+rules_magic_dev_deps()
+
+# We're using latest_deps.bzl because this is essentially a test module for
+# `@rules_magic`. Normal consumers would only use `deps.bzl`.
+load("@rules_magic//magic:latest_deps.bzl", "rules_magic_deps")
+
+# If you want to see what happens with Bazel 6 or 7 in legacy WORKSPACE
+# mode, comment out the `latest_deps.bzl` statement and uncomment this one.
+# Bazel 8 will break, since it requires `protobuf` v29 or higher.
+#load("@rules_magic//magic:deps.bzl", "rules_magic_deps")
 
 rules_magic_deps()
 
