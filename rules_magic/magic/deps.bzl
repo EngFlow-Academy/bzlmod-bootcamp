@@ -12,28 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Macro for instantiating repos required for core functionality."""
+"""Macro for instantiating the oldest versions of required dependencies."""
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
+load("//magic:private/bazel_worker_api.bzl", "bazel_worker_api")
 
 def rules_magic_deps():
-    """Instantiate dependency repositories required for core functionality."""
-    maybe(
-        http_archive,
-        name = "rules_cc",
-        sha256 = "5287821524d1c1d20f1c0ffa90bd2c2d776473dd8c84dafa9eb783150286d825",
-        strip_prefix = "rules_cc-0.2.11",
-        url = "https://github.com/bazelbuild/rules_cc/releases/download/0.2.11/rules_cc-0.2.11.tar.gz",
-    )
+    """Instantiate oldest dependencies required for core functionality."""
 
+    # Technically, we could support `rules_java` 7.10.0, maybe earlier versions.
+    # But the legacy `WORKSPACE` setup is different from `rules_java` 8.5.0, so
+    # we keep 8.5.0 here. This enables swapping this file with `latest_deps.bzl`
+    # in the legacy `WORKSPACE` file without changing the `rules_java` setup
+    # macro calls.
     maybe(
         http_archive,
         name = "rules_java",
         urls = [
-            "https://github.com/bazelbuild/rules_java/releases/download/8.16.1/rules_java-8.16.1.tar.gz",
+            "https://github.com/bazelbuild/rules_java/releases/download/8.5.0/rules_java-8.5.0.tar.gz",
         ],
-        sha256 = "1b30698d89dccd9dc01b1a4ad7e9e5c6e669cdf1918dbb050334e365b40a1b5e",
+        sha256 = "5c215757b9a6c3dd5312a3cdc4896cef3f0c5b31db31baa8da0d988685d42ae4",
     )
 
     # Uncomment to compile protobuf using Bazel 6.5.0 without the C++17 flags in
@@ -46,62 +45,33 @@ def rules_magic_deps():
     #    url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20220623.1.tar.gz",
     #)
 
-    # The Bazel 9 build requires protobuf >= 32.0 in MODULE.bazel to avoid
-    # warnings. protobuf v30 removed py_proto_library from its //protobuf.bzl
-    # file, which the @bazel_tools//src/main/protobuf package requires. But
-    # since we've replaced the @bazel_tools dependency with @bazel_worker_api,
-    # we can bump this to a newer version. See: bazelbuild/bazel#26579.
-    #
-    # Also, protobuf v32 explicitly breaks Bazel 6 compatibility. Bazel 9 drops
-    # the legacy WORKSPACE model completely, so we use the latest protobuf
-    # version that still supports Bazel 6. If you don't care about Bazel 6
-    # compatibility, bump this to the same version as in MODULE.bazel.
+    # This is the lowest version that works with `bazel_worker_api`, macOS 26,
+    # and Xcode 26, as described in previous commits. Bazel 8 builds in legacy
+    # `WORKSPACE` mode require `protobuf` >= v29.
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "c3a0a9ece8932e31c3b736e2db18b1c42e7070cd9b881388b26d01aa71e24ca2",
-        strip_prefix = "protobuf-31.1",
-        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v31.1.tar.gz",
+        sha256 = "13e7749c30bc24af6ee93e092422f9dc08491c7097efa69461f88eb5f61805ce",
+        strip_prefix = "protobuf-28.0",
+        url = "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v28.0.tar.gz",
     )
 
-    # Required by Bazel 8.3.0 and above, since the legacy WORKSPACE suffix loads
+    # Required by Bazel 8 after 8.3.0, since the legacy WORKSPACE suffix loads
     # `@bazel_features//:deps.bzl` but doesn't instantiate the `@bazel_features` repo.
+    #
     # - https://github.com/bazelbuild/bazel/commit/0e528d037e041ea754e4420de6b4c9f2e502b57e
     # - https://github.com/bazelbuild/bazel/blob/8.4.2/src/main/java/com/google/devtools/build/lib/bazel/rules/BUILD#L136-L137
+    #
+    # Bazel 8 won't build without `protobuf` >= v29, so technically we don't
+    # need to instantiate our own `bazel_features` repo. As with `rules_java`
+    # 8.5.0, this enables swapping this file with `latest_deps.bzl` without
+    # removing `bazel_features_deps` from the legacy `WORKSPACE` file.
     maybe(
         http_archive,
         name = "bazel_features",
-        sha256 = "a660027f5a87f13224ab54b8dc6e191693c554f2692fcca46e8e29ee7dabc43b",
-        strip_prefix = "bazel_features-1.30.0",
-        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.30.0/bazel_features-v1.30.0.tar.gz",
+        sha256 = "95fb3cfd11466b4cad6565e3647a76f89886d875556a4b827c021525cb2482bb",
+        strip_prefix = "bazel_features-1.10.0",
+        url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.10.0/bazel_features-v1.10.0.tar.gz",
     )
 
-    # Required by protobuf >= v29.0. Invoking `bazel_features_deps()` first
-    # instantiates v1.6.1, which lacks `paths.is_normalized()`.
-    maybe(
-        http_archive,
-        name = "bazel_skylib",
-        sha256 = "d00f1389ee20b60018e92644e0948e16e350a7707219e7a390fb0a99b6ec9262",
-        urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.7.0/bazel-skylib-1.7.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.7.0/bazel-skylib-1.7.0.tar.gz",
-        ],
-    )
-
-    maybe(
-        http_archive,
-        name = "rules_python",
-        sha256 = "9f9f3b300a9264e4c77999312ce663be5dee9a56e361a1f6fe7ec60e1beef9a3",
-        strip_prefix = "rules_python-1.4.1",
-        url = "https://github.com/bazel-contrib/rules_python/releases/download/1.4.1/rules_python-1.4.1.tar.gz",
-    )
-
-    maybe(
-        http_archive,
-        name = "bazel_worker_api",
-        sha256 = "5aac6ae6a23015cc7984492a114dc539effc244ec5ac7f8f6b1539c15fb376eb",
-        urls = [
-            "https://github.com/bazelbuild/bazel-worker-api/releases/download/v0.0.6/bazel-worker-api-v0.0.6.tar.gz",
-        ],
-        strip_prefix = "bazel-worker-api-0.0.6/proto",
-    )
+    bazel_worker_api()
