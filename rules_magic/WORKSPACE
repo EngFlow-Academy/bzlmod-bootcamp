@@ -24,7 +24,12 @@ magic_config(
     ],
 )
 
-load("//magic:deps.bzl", "rules_magic_deps")
+# Comes first to ensure the newest versions of rules_cc and rules_python.
+load("//magic:private/dev_deps.bzl", "rules_magic_dev_deps")
+
+rules_magic_dev_deps()
+
+load("//magic:latest_deps.bzl", "rules_magic_deps")
 
 rules_magic_deps()
 
