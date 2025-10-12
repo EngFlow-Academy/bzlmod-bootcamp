@@ -14,18 +14,17 @@
 
 load(
     "@com_frobozz_rules_magic//magic:magic.bzl",
+    "magic_binary",
     "magic_digests",
     "magic_library",
     "magic_test",
 )
 
-load("@rules_java//java:defs.bzl", "java_binary")
-
 magic_library(
     name = "default-values",
 )
 
-java_binary(
+magic_binary(
     name = "EmitValues",
     main_class = "bootcamp.EmitValues",
     srcs = ["EmitValues.java"],

@@ -51,6 +51,7 @@ load(
     _setup_magic_toolchain = "setup_magic_toolchain",
 )
 
+magic_binary = native.java_binary
 magic_digests = _magic_digests
 magic_library = _magic_library
 magic_spells_repository = _magic_spells_repository
