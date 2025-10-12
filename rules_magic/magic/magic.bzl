@@ -14,6 +14,7 @@
 
 """rules_magic public API"""
 
+load("@rules_java//java:defs.bzl", "java_binary")
 load(":deps.bzl", _rules_magic_deps = "rules_magic_deps")
 load(":magic_digests.bzl", _magic_digests = "magic_digests")
 load(":magic_library.bzl", _magic_library = "magic_library")
@@ -36,7 +37,7 @@ load(
     _setup_magic_toolchain = "setup_magic_toolchain",
 )
 
-magic_binary = native.java_binary
+magic_binary = java_binary
 magic_digests = _magic_digests
 magic_library = _magic_library
 magic_spells_repository = _magic_spells_repository
