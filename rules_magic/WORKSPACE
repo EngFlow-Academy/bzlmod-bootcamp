@@ -32,10 +32,6 @@ load(
 
 rules_magic_deps()
 
-load("@rules_python//python:repositories.bzl", "py_repositories")
-
-py_repositories()
-
 # Note that `rules_java` 8.x suggests loading `protobuf_deps()` after
 # `rules_java_dependencies` and before `rules_java_toolchains()`:
 # - https://github.com/bazelbuild/rules_java/releases/tag/8.9.0
@@ -52,5 +48,11 @@ protobuf_deps()
 load("@rules_java//java:repositories.bzl", "rules_java_toolchains")
 
 rules_java_toolchains()
+
+# Comes after `protobuf_deps` so `protobuf` gets the version of `bazel_skylib`
+# that it needs.
+load("@rules_python//python:repositories.bzl", "py_repositories")
+
+py_repositories()
 
 rules_magic_toolchains()
