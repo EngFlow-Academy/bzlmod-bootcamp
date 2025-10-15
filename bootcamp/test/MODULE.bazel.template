@@ -1,0 +1,43 @@
+# Copyright 2025 EngFlow, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Bazel module template for test/minimum_dependency_versions_test.sh."""
+
+module(name = "rules_magic_minimum_dependency_versions_test")
+
+# These relative paths account for the fact that the test runs in
+# bootcamp/tmp/dependency_versions_test.
+bazel_dep(name = "bzlmod_bootcamp")
+local_path_override(
+    module_name = "bzlmod_bootcamp",
+    path = "../..",
+)
+
+bazel_dep(name = "rules_magic")
+local_path_override(
+    module_name = "rules_magic",
+    path = "../../../rules_magic",
+)
+
+bazel_dep(name = "rules_java")
+single_version_override(
+    module_name = "rules_java",
+    version = "${rules_java_version}",
+)
+
+bazel_dep(name = "protobuf")
+single_version_override(
+    module_name = "protobuf",
+    version = "${protobuf_version}",
+)
