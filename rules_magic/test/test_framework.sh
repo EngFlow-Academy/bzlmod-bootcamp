@@ -86,6 +86,9 @@ run_test_file() {
     local src_path="$1"
     local test_only="${RULES_MAGIC_TEST_ONLY:-}"
     local test_funcs=()
+    local setup_suite=""
+    local teardown_suite=""
+
     if [[ ! -r "$src_path" ]]; then
       FAILURES+=("Test file not found or permission denied: ${src_path}")
       return 1
@@ -98,6 +101,11 @@ run_test_file() {
         if [[ -z "$test_only" || "$test_only" == "$test_func" ]]; then
           test_funcs+=("$test_func")
         fi
+
+      elif [[ "$line" == "setup_suite() {" ]]; then
+        setup_suite="true"
+      elif [[ "$line" == "teardown_suite() {" ]]; then
+        teardown_suite="true"
       fi
     done <"$src_path"
 
@@ -107,6 +115,10 @@ run_test_file() {
 
     echo -e $'\n'"${BOLD}File: ${src_path}${NC}"
     . "$src_path"
+
+    if [[ -n "$setup_suite" ]]; then
+      setup_suite
+    fi
 
     for test_func in "${test_funcs[@]}"; do
       if [[ "${test_func:0:1}" == '_' ]]; then
@@ -125,6 +137,10 @@ run_test_file() {
         fi
       fi
     done
+
+    if [[ -n "$teardown_suite" ]]; then
+      teardown_suite
+    fi
 }
 
 _print_test_list() {
@@ -166,4 +182,34 @@ run_test_files() {
     _print_test_list "$BOLD_RED" "failed in ${duration}" "$RED" "${FAILURES[@]}"
     return ${#FAILURES[@]}
   fi
+}
+
+# Creates a temporary directory for the test file and changes into it.
+#
+# `$PWD` will be this new test directory upon returning.
+#
+# Args:
+#   root_dir: the root directory of the repository
+#   test_file_name: the name of the test file
+setup_test_tmpdir_for_file() {
+  local root_dir="$1"
+  local test_file_name="${2##*/}"
+  local test_tmpdir="${root_dir}/tmp/${test_file_name%.*}"
+
+  mkdir -p "$test_tmpdir"
+  cd "$test_tmpdir"
+}
+
+# Cleans the Bazel workspace, removes the test dir, and restores `$PWD`.
+#
+# Args:
+#   original_dir: `$PWD` at the start of `setup_test_tmpdir_for_file()`
+#   test_tmpdir: `$PWD` at the end of `setup_test_tmpdir_for_file()`
+teardown_test_tmpdir() {
+    local original_dir="$1"
+    local test_tmpdir="$2"
+
+    bazel clean --expunge_async 2>/dev/null
+    cd "$original_dir"
+    rm -rf "$test_tmpdir"
 }
