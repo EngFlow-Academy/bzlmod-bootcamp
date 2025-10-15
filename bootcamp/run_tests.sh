@@ -25,6 +25,7 @@ fi
 TEST_FILES=(
   "smoke_tests.sh"
   "emit_values_test.sh"
+  "minimum_dependency_versions_test.sh"
 )
 TEST_FILES=("${TEST_FILES[@]/#/test\/}")
 
