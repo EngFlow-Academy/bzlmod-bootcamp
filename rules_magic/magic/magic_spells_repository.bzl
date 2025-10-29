@@ -25,9 +25,11 @@ alias(
 """
 
 def _magic_spells_repository_impl(rctx):
+    # Replace with rctx.original_name once all supported Bazels have it.
+    repo_name = getattr(rctx, "original_name", rctx.attr.default_target_name)
     rctx.file(
         "BUILD",
-        content = _BUILD_FILE.format(repo_name = rctx.name),
+        content = _BUILD_FILE.format(repo_name = repo_name),
         executable = False,
     )
     rctx.symlink(
@@ -35,12 +37,21 @@ def _magic_spells_repository_impl(rctx):
         "spells.json",
     )
 
-magic_spells_repository = repository_rule(
+_magic_spells_repository = repository_rule(
     implementation = _magic_spells_repository_impl,
     attrs = {
+        # Remove once all supported Bazels have repository_ctx.original_name.
+        "default_target_name": attr.string(mandatory = True),
         "spells_json": attr.label(
             allow_single_file = [".json"],
             mandatory = True,
         ),
     },
 )
+
+def magic_spells_repository(name, **kwargs):
+    _magic_spells_repository(
+        name = name,
+        default_target_name = name,
+        **kwargs
+    )
