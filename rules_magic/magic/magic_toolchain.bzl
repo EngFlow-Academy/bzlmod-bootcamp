@@ -28,13 +28,13 @@ load(
 )
 
 _ATTRS = {
-    "magic_version": attr.string(default = MAGIC_VERSION),
     "game": attr.string(default = GAME),
+    "magic_version": attr.string(default = MAGIC_VERSION),
+    "some_feature": attr.bool(default = ENABLE_SOME_FEATURE),
     "spells_json": attr.label(
         allow_single_file = [".json"],
         mandatory = True,
     ),
-    "some_feature": attr.bool(default = ENABLE_SOME_FEATURE),
 }
 
 def _magic_toolchain_impl(ctx):
@@ -47,7 +47,7 @@ def _magic_toolchain_impl(ctx):
                 games = GAMES,
                 some_feature = ctx.attr.some_feature,
                 spells_json = ctx.attr.spells_json,
-            )
+            ),
         ),
     ]
 

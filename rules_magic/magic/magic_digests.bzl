@@ -43,7 +43,7 @@ def _magic_digests_impl(ctx):
         executable = ctx.executable.worker,
         mnemonic = "MagicDigests",
         execution_requirements = {
-            "supports-workers" : "1",
+            "supports-workers": "1",
         },
         arguments = [args],
     )

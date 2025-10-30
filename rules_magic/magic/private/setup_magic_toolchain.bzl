@@ -30,12 +30,11 @@ load(
 )
 
 def setup_magic_toolchain(
-    name,
-    magic_version = MAGIC_VERSION,
-    game = GAME,
-    spells_json = None,
-    some_feature = ENABLE_SOME_FEATURE):
-
+        name,
+        magic_version = MAGIC_VERSION,
+        game = GAME,
+        spells_json = None,
+        some_feature = ENABLE_SOME_FEATURE):
     if spells_json == None and game in BUILTIN_GAMES:
         spells_json = "//external:%s_spells" % game
 

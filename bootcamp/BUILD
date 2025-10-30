@@ -26,8 +26,8 @@ magic_library(
 
 magic_binary(
     name = "EmitValues",
-    main_class = "bootcamp.EmitValues",
     srcs = ["EmitValues.java"],
+    main_class = "bootcamp.EmitValues",
     deps = [":default-values"],
 )
 
@@ -37,8 +37,12 @@ genrule(
     outs = ["expansions.txt"],
     cmd = "\n".join([
         "echo {f}: $({f} @com_frobozz_rules_magic_leaflet) >>$@".format(f = f)
-        for f in ["execpath", "rootpath", "location"]
-    ])
+        for f in [
+            "execpath",
+            "rootpath",
+            "location",
+        ]
+    ]),
 )
 
 magic_digests(
@@ -54,6 +58,6 @@ magic_digests(
 magic_test(
     name = "example_test",
     srcs = ["test.sh"],
-    deps = ["@com_frobozz_rules_magic_leaflet"],
     data = ["$(location @com_frobozz_rules_magic_leaflet)"],
+    deps = ["@com_frobozz_rules_magic_leaflet"],
 )

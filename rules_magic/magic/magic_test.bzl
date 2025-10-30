@@ -35,6 +35,7 @@ def expand_vars(ctx, attr_name, value, targets, additional_vars):
 
 def run_environment_info(ctx):
     """Create a RunEnvironmentInfo provider from `ctx.attr.env` values"""
+
     # Replace `[]` with `getattr(ctx.attr, "data", [])` later in the workshop.
     targets = []
 
@@ -54,12 +55,13 @@ def _magic_test_impl(ctx):
         is_executable = True,
         output = executable,
         substitutions = {
-            "{{src_paths}}": "\n".join(
-                ["\"%s\"" % f.path for f in ctx.files.srcs]
-            ),
             "{{data_files}}": "\n".join([
-                "\"%s\"" % ctx.expand_location(d) for d in ctx.attr.data
+                "\"%s\"" % ctx.expand_location(d)
+                for d in ctx.attr.data
             ]),
+            "{{src_paths}}": "\n".join(
+                ["\"%s\"" % f.path for f in ctx.files.srcs],
+            ),
             "{{test_framework_path}}": ctx.file._test_framework.path,
         },
     )
@@ -85,18 +87,18 @@ magic_test = rule(
     # See https://bazel.build/extending/rules#test_rules for implicit
     # dependencies used by Bazel to generate coverage reports.
     attrs = {
-        "srcs": attr.label_list(allow_files = True),
-        "deps": attr.label_list(),
         "data": attr.string_list(),
+        "deps": attr.label_list(),
         "env": attr.string_dict(),
         "env_inherit": attr.string_list(),
-        "_test_framework": attr.label(
-            allow_single_file = True,
-            default = "//test:test_framework.sh",
-        ),
+        "srcs": attr.label_list(allow_files = True),
         "_template": attr.label(
             allow_single_file = True,
             default = ":private/test.sh.template",
+        ),
+        "_test_framework": attr.label(
+            allow_single_file = True,
+            default = "//test:test_framework.sh",
         ),
     },
     test = True,

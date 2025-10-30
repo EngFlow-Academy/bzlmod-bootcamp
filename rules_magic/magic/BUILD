@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@com_frobozz_rules_magic//magic:magic.bzl",
+load(
+    "@com_frobozz_rules_magic//magic:magic.bzl",
     "magic_library",
     "setup_magic_toolchain",
 )

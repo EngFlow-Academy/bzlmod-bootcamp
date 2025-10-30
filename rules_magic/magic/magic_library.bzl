@@ -15,11 +15,11 @@
 """magic_library implementation"""
 
 _ATTRS = {
-    "version": attr.string(),
     "java_compile_toolchain": attr.label(
         default = "@bazel_tools//tools/jdk:toolchain_jdk_17",
         providers = [java_common.JavaToolchainInfo],
     ),
+    "version": attr.string(),
     "_template": attr.label(
         allow_single_file = True,
         default = ":private/magic.java.template",
@@ -46,12 +46,12 @@ def _magic_library_impl(ctx):
         output = src_file,
         substitutions = {
             "{{class_name}}": class_name,
-            "{{version}}": version,
-            "{{versions}}": str(info.versions)[1:-1],
-            "{{game}}": info.game,
             "{{games}}": str(info.games)[1:-1],
+            "{{game}}": info.game,
             "{{some_feature_enabled}}": str(some_feature).lower(),
             "{{spells_json}}": spells_json.path,
+            "{{versions}}": str(info.versions)[1:-1],
+            "{{version}}": version,
         },
     )
 

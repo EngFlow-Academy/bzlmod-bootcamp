@@ -17,7 +17,11 @@ workspace(name = "com_frobozz_rules_magic")
 load("@com_frobozz_rules_magic//magic:config.bzl", "magic_config")
 
 magic_config(
-    versions = ["1.2.3", "4.5.6", "7.8.9"],
+    versions = [
+        "1.2.3",
+        "4.5.6",
+        "7.8.9",
+    ],
 )
 
 load(
@@ -35,6 +39,7 @@ load(
 )
 
 rules_java_dependencies()
+
 rules_java_toolchains()
 
 load(
@@ -44,6 +49,7 @@ load(
 )
 
 rules_proto_dependencies()
+
 rules_proto_toolchains()
 
 rules_magic_toolchains()
