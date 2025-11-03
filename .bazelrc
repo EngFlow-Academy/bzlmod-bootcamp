@@ -17,6 +17,10 @@ common --enable_bzlmod --noenable_workspace
 # Remove once Bazel 8 becomes the minimum supported version.
 common --incompatible_use_plus_in_repo_names
 
+# Bazel 8 legacy WORKSPACE builds need this to avoid a cycle while autoloading
+# symbols from `rules_cc` >= 2.12. It has no effect on any other builds.
+common --repositories_without_autoloads=cc_compatibility_proxy
+
 # Uncomment to ensure the `MODULE.bazel.lock` file remains up to date relative
 # to the current value of `.bazelversion`.
 #
