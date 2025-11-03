@@ -142,50 +142,6 @@
   },
   "selectedYankedVersions": {},
   "moduleExtensions": {
-    "//extensions:rules_magic_toolchains.bzl%magic_toolchains": {
-      "general": {
-        "bzlTransitiveDigest": "X6OoxxzByeRDnMSO7A1OqvHTaW7WvSKI7A/owQZ8qGU=",
-        "usagesDigest": "8o8vG/sz4i9HwMDfXPA+WDjNEgOrUwaHAlAg5ouvQRQ=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "rules_magic_spells_enchanter": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:local.bzl%new_local_repository",
-            "attributes": {
-              "path": "../spells/enchanter",
-              "build_file_content": "exports_files([\"spells.json\"])\n\nalias(\n    name = \"rules_magic_spells_enchanter\",\n    actual = \":spells.json\",\n    visibility = [\"//visibility:public\"],\n)\n"
-            }
-          },
-          "rules_magic_spells_sorcerer": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:local.bzl%new_local_repository",
-            "attributes": {
-              "path": "../spells/sorcerer",
-              "build_file_content": "exports_files([\"spells.json\"])\n\nalias(\n    name = \"rules_magic_spells_sorcerer\",\n    actual = \":spells.json\",\n    visibility = [\"//visibility:public\"],\n)\n"
-            }
-          },
-          "rules_magic_spells_spellbreaker": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:local.bzl%new_local_repository",
-            "attributes": {
-              "path": "../spells/spellbreaker",
-              "build_file_content": "exports_files([\"spells.json\"])\n\nalias(\n    name = \"rules_magic_spells_spellbreaker\",\n    actual = \":spells.json\",\n    visibility = [\"//visibility:public\"],\n)\n"
-            }
-          }
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "",
-            "bazel_tools",
-            "bazel_tools"
-          ],
-          [
-            "",
-            "rules_magic",
-            "+_repo_rules+rules_magic"
-          ]
-        ]
-      }
-    },
     "@@rules_kotlin+//src/main/starlark/core/repositories:bzlmod_setup.bzl%rules_kotlin_extensions": {
       "general": {
         "bzlTransitiveDigest": "OlvsB0HsvxbR8ZN+J9Vf00X/+WVz/Y/5Xrq2LgcVfdo=",
