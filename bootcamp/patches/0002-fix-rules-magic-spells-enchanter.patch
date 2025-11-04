@@ -1,0 +1,68 @@
+# Copyright 2025 EngFlow, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+commit ca10bfa8892e0f28a7c94821338d1fcab26685ca
+Author: Mike Bland <mbland@engflow.com>
+Date:   Tue Oct 28 22:32:35 2025 -0400
+
+    Fix default @rules_magic_spells_enchanter target
+    
+    Fixes the breakage in `@rules_magic_spells_enchanter` from the previous
+    commit using the same fixes from "Fix default @rules_magic_leaflet_repo
+    target". Basically, it uses `repository_ctx.original_name` when it's
+    available, and falls back to the `default_target_name` added by the
+    macro wrapper otherwise.
+    
+    All builds are passing again.
+
+diff --git a/rules_magic/magic/magic_spells_repository.bzl b/rules_magic/magic/magic_spells_repository.bzl
+index 7d671f0..4e7a883 100644
+--- a/rules_magic/magic/magic_spells_repository.bzl
++++ b/rules_magic/magic/magic_spells_repository.bzl
+@@ -25,9 +25,11 @@ alias(
+ """
+ 
+ def _magic_spells_repository_impl(rctx):
++    # Replace with rctx.original_name once all supported Bazels have it.
++    repo_name = getattr(rctx, "original_name", rctx.attr.default_target_name)
+     rctx.file(
+         "BUILD",
+-        content = _BUILD_FILE.format(repo_name = rctx.name),
++        content = _BUILD_FILE.format(repo_name = repo_name),
+         executable = False,
+     )
+     rctx.symlink(
+@@ -35,12 +37,21 @@ def _magic_spells_repository_impl(rctx):
+         "spells.json",
+     )
+ 
+-magic_spells_repository = repository_rule(
++_magic_spells_repository = repository_rule(
+     implementation = _magic_spells_repository_impl,
+     attrs = {
++        # Remove once all supported Bazels have repository_ctx.original_name.
++        "default_target_name": attr.string(mandatory = True),
+         "spells_json": attr.label(
+             allow_single_file = [".json"],
+             mandatory = True,
+         ),
+     },
+ )
++
++def magic_spells_repository(name, **kwargs):
++    _magic_spells_repository(
++        name = name,
++        default_target_name = name,
++        **kwargs
++    )
