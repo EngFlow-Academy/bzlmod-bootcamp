@@ -31,6 +31,7 @@ git_repository(
     patches = [
         "//patches:0000-fix-rules-magic-leaflet-default-repo-target.patch",
         "//patches:0001-replace-bind-with-repo-reference.patch",
+        "//patches:0002-fix-rules-magic-spells-enchanter.patch",
     ],
     remote = "git@github.com:EngFlow-Academy/bzlmod-bootcamp.git",
     strip_prefix = "rules_magic",
