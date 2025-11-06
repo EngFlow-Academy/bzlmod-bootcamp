@@ -1,4 +1,4 @@
-# Bzlmod Migration Bootcamp example
+# Bzlmod Migration Bootcamp
 
 This is the example project for the __Bzlmod Migration Bootcamp__ workshop. It
 demonstrates how to migrate [Bazel][] projects using the [legacy WORKSPACE][]
@@ -14,6 +14,24 @@ It also shows how to:
     versions
 - Write and run tests to validate rule behaviors, including failure behaviors
 - Write and run tests to validate version compatibility contracts
+
+## Slides
+
+See the __[Releases][]__ page for official releases of the accompanying slides
+in PDF format.
+
+This is how the versioned slides stay in sync with the corresponding code:
+
+- Each official release will correspond to a version tag for this repository of
+    the form `v[Major].[minor].[patch]`.
+
+- Each example project [milestone](#milestones) for that release will have its
+    own versioned tag name of the form `v[Major].[minor].[patch]-[milestone]`.
+
+- The slides will contain links to commit lists and source files that include
+    the versioned tag name of the relevant milestone. This way each release of
+    the slides will contain stable links to the corresponding version of the
+    example repo.
 
 ## Rationale
 
@@ -97,13 +115,34 @@ your own projects, however unique the details of those challenges may be.
   - an IDE of choice, such as [Visual Studio Code][] (ideally with
     [Vim keybindings][])
 
-## Branches
+## Milestones
 
-These branches are listed in reverse chronological order, with each branch based
-on the one below it, with the following exception:
+Git branches and tags identify significant points throughout the migration
+process whereby a subset of changes within the overall history achieves a
+specific outcome. We call those points and the branches and tags that identify
+them "milestones."
 
-- The `bzlmod` branch is based on the `own-repo-names` branch, the same as
-    `bzlmod-client-patches`.
+- Milestone branches are subject to change at any time as the course evolves.
+    The `main` branch corresponds to the latest development version of the
+    `compatibility` milestone.
+
+- Milestone tags have the form `v[Major].[minor].[patch]-[milestone]`. They will
+    remain stable to ensure links from the corresponding [slide deck](#slides)
+    version remain intact.
+
+While many of the changes throughout the commit history could happen in any
+order, milestones help put specific collections of commits within context. For
+example, the commits after the `bazel-7` milestone and including the `bazel-8`
+milestone specifically demonstrate Bazel 8 compatibility issues and fixes.
+
+The table below illustrates how the migration process makes the project
+compatible with newer Bazels, and eventually Bzlmod, without sacrificing
+backward compatibility. The milestones comprising the process appear in reverse
+chronological order, as they would appear in `git log`. Each milestone builds on
+the milestone below it, with one exception:
+
+- The `bzlmod-client-patches` milestone is based on the `own-repo-names`
+  milestone, the same as `bzlmod`.
 
 - `bzlmod` shows how to update the [rules_magic][] rule set repository to make
     it Bzlmod compatible. This is the preferred migration path.
@@ -115,32 +154,32 @@ on the one below it, with the following exception:
     preferred migration path, but demonstrates how a client repository can adapt
     a non-Bzlmod compatible dependency to build under Bzlmod.
 
-It's helpful to view the branch history in your Git commit history viewer of
-choice, such as [gitk][] or [tig][]. The summary lines in the commit history
-list provide a good overview of the migration process and the individual steps
-involved. Each full commit message contains extensive descriptions,
-explanations, and relevant links for that particular migration step.
-
-Most of the changes from `bazel-7` and the branches based on it are orthogonal,
-backwards compatible, and can happen in almost any order.
-
-| Branch | Bazel versions | Legacy `WORKSPACE` | Bzlmod |
+| Milestone | Bazel versions | Legacy `WORKSPACE` | Bzlmod |
 | :-: | :-: | :-: | :-: |
 | `compatibility` | 6, 7, 8, `rolling`, `last_green` | &#x2705; | &#x2705; |
 | `toolchains` | 6, 7, 8, `rolling`, `last_green` | &#x2705; | &#x2705; |
 | `bazel-9` | 6, 7, 8, `rolling`, `last_green` | &#x2705; | &#x2705; |
-| `bzlmod` | 6, 7, 8 | &#x2705; | &#x2705; |
 | `bzlmod-client-patches` | 6, 7, 8 | &#x2705; | &#x2705; |
+| `bzlmod` | 6, 7, 8 | &#x2705; | &#x2705; |
 | `own-repo-names` | 6, 7, 8 | &#x2705; | |
 | `bazel-8` | 6, 7, 8 | &#x2705; | |
 | `bazel-7` | 6, 7 | &#x2705; | |
-| `main` | 6 | &#x2705; | |
+| `bazel-6` | 6 | &#x2705; | |
+
+## Viewing the commit history
+
+It's helpful to view the commit history in your Git commit history viewer of
+choice, such as [gitk][] or [tig][]. The summary lines in the commit history
+list provide a good overview of the migration process and the individual steps
+involved. Each full commit message contains extensive descriptions,
+explanations, and relevant links for that particular migration step.
 
 [Bazel]: https://bazel.build/
 [Bazel modules]: https://bazel.build/external/module
 [Bazelisk]: https://github.com/bazelbuild/bazelisk?tab=readme-ov-file#installation
 [Bzlmod migration guide]: https://bazel.build/external/migration
 [FrobozzCo International]: https://zork.fandom.com/wiki/FrobozzCo_International
+[Releases]: https://github.com/EngFlow-Academy/bzlmod-bootcamp/releases
 [Visual Studio Code]: https://code.visualstudio.com/
 [Vim keybindings]: https://marketplace.visualstudio.com/items?itemName=vscodevim.vim
 [WORKSPACE.bzlmod]: https://bazel.build/external/migration#workspace.bzlmod
