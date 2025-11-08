@@ -49,6 +49,7 @@ def run_environment_info(ctx):
 
 def _magic_test_impl(ctx):
     executable = ctx.actions.declare_file(ctx.label.name)
+    batch_file = None
 
     ctx.actions.expand_template(
         template = ctx.file._template,
@@ -66,22 +67,35 @@ def _magic_test_impl(ctx):
         },
     )
 
+    # Bazel normally adds the executable to the rule's `runfiles` implicitly.
+    # However, the executable will be `batch_file` (defined below) on Windows,
+    # so we add `executable` explicitly here.
     dep_attrs = ctx.attr.srcs + ctx.attr.deps
-    runfiles_files = ctx.files.srcs + [ctx.file._test_framework]
+    runfiles_files = ctx.files.srcs + [executable, ctx.file._test_framework]
     runfiles = ctx.runfiles(files = runfiles_files).merge_all([
         target[DefaultInfo].default_runfiles
         for target in dep_attrs
     ])
 
+    # Windows can't run Bash scripts directly, so we wrap our main executable in
+    # a batch file.
+    if ctx.attr.windows == True:
+        batch_file = ctx.actions.declare_file(executable.basename + ".bat")
+        ctx.actions.write(
+            content = "bash " + executable.short_path,
+            is_executable = True,
+            output = batch_file,
+        )
+
     return [
         DefaultInfo(
-            executable = executable,
+            executable = batch_file or executable,
             runfiles = runfiles,
         ),
         run_environment_info(ctx),
     ]
 
-magic_test = rule(
+_magic_test = rule(
     implementation = _magic_test_impl,
     doc = "A glorified sh_test",
     # See https://bazel.build/extending/rules#test_rules for implicit
@@ -92,6 +106,7 @@ magic_test = rule(
         "env": attr.string_dict(),
         "env_inherit": attr.string_list(),
         "srcs": attr.label_list(allow_files = True),
+        "windows": attr.bool(),
         "_template": attr.label(
             allow_single_file = True,
             default = ":private/test.sh.template",
@@ -103,3 +118,12 @@ magic_test = rule(
     },
     test = True,
 )
+
+def magic_test(**kwargs):
+    _magic_test(
+        windows = select({
+            Label("@platforms//os:windows"): True,
+            "//conditions:default": False,
+        }),
+        **kwargs
+    )

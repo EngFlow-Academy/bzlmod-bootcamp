@@ -24,8 +24,14 @@ public class EmitValues {
     public static void main(String[] args) {
         System.out.println("MAGIC_VERSION: " + DefaultValues.VERSION);
         System.out.println("GAME: " + DefaultValues.GAME);
-        System.out.println( "SOME_FEATURE_ENABLED: " +
+        System.out.println("SOME_FEATURE_ENABLED: " +
             DefaultValues.SOME_FEATURE_ENABLED);
+
+        // Normally we'd pass paths like this via `$(rootpath)` or `$(execpath)`
+        // attribute values, or use a `$(rlocationpath)` value with a runfiles
+        // library. But here we're validating that our `magic_toolchain`
+        // received the correct path, which `magic_library` applied to a
+        // template to generate this value.
         System.out.println("SPELLS_JSON: " + DefaultValues.SPELLS_JSON);
 
         try (BufferedReader in = new BufferedReader(

@@ -109,6 +109,7 @@ your own projects, however unique the details of those challenges may be.
 
 - All the necessary tools already installed on the development machine:
   - [git][]
+    - [git-for-windows][] on Windows, as this project requires [Bash][]
   - the [Bazelisk][] wrapper for launching specific Bazel versions
   - a C/C++ compiler or development suite, e.g. [gcc][] or [clang][] on Linux,
     [Xcode][] on macOS, or [msvc][] or [clang][] on Windows
@@ -174,6 +175,7 @@ list provide a good overview of the migration process and the individual steps
 involved. Each full commit message contains extensive descriptions,
 explanations, and relevant links for that particular migration step.
 
+[Bash]: https://www.gnu.org/software/bash/
 [Bazel]: https://bazel.build/
 [Bazel modules]: https://bazel.build/external/module
 [Bazelisk]: https://github.com/bazelbuild/bazelisk?tab=readme-ov-file#installation
@@ -193,8 +195,9 @@ explanations, and relevant links for that particular migration step.
 [bzlmod-only]: https://blog.bazel.build/2023/12/11/bazel-7-release.html#bzlmod
 [clang]: https://clang.llvm.org/
 [gcc]: https://gcc.gnu.org/
-[git]: https://git-scm.com/
 [git repository]: https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-repository
+[git-for-windows]: https://gitforwindows.org/
+[git]: https://git-scm.com/
 [Bazel repositories]: https://bazel.build/concepts/build-ref#repositories
 [msvc]: https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022
 [rolling]: https://bazel.build/release/rolling

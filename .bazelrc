@@ -8,3 +8,7 @@
 # --enable_workspace doesn't exist in Bazel 6. It defaults to `true` in Bazel 7
 # and `false` in Bazel 8.
 common --noenable_bzlmod #--enable_workspace
+
+# Make sure to enable runfiles on Windows, since `bootcamp/EmitValues.java`
+# requires this to read the file from `SCRIPTS_JSON`.
+common --enable_runfiles
