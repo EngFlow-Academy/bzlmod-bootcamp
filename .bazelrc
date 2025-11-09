@@ -37,3 +37,8 @@ common --repositories_without_autoloads=cc_compatibility_proxy
 # Make sure to enable runfiles on Windows, since `bootcamp/EmitValues.java`
 # requires this to read the file from `SCRIPTS_JSON`.
 common --enable_runfiles
+
+# Avoid depending on local JDK and requiring JAVA_HOME to be set.
+# https://bazel.build/reference/command-line-reference#flag--java_runtime_version defaults to local_jdk
+common --java_runtime_version=remotejdk_11
+
