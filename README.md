@@ -15,6 +15,13 @@ It also shows how to:
 - Write and run tests to validate rule behaviors, including failure behaviors
 - Write and run tests to validate version compatibility contracts
 
+## Video
+
+This is the video of the Bzlmod Migration Bootcamp v1.0.0 presented at BazelCon
+in Atlanta, GA on 2025-11-09:
+
+[![Thumbnail for the Bzlmod Migration Bootcamp video][bc-vid-img]][bc-vid]
+
 ## Slides
 
 See the __[Releases][]__ page for official releases of the accompanying slides
@@ -188,6 +195,9 @@ explanations, and relevant links for that particular migration step.
 [Xcode]: https://developer.apple.com/xcode/
 [external dependencies]: https://bazel.build/external/overview
 [legacy WORKSPACE]: https://bazel.build/external/overview#workspace-shortcomings
+[bc-vid]: https://youtu.be/yhRW_Fugm9c
+[bc-vid-img]: https://img.youtube.com/vi/yhRW_Fugm9c/hqdefault.jpg
+  "Bzlmod Migration Bootcamp v1.0.0 at BazelCon in Atlanta, GA on 2025-11-09"
 [bcr-tool]: https://bazel.build/external/migration#migration-tool-how-to-use
 [blog]: https://blog.engflow.com/category/bzlmod/
 [bootcamp]: ./bootcamp/
