@@ -41,7 +41,7 @@ single_version_override(
 # protocol buffer versions are generally compatible with older versions. For
 # that reason, this `bazel_dep` doesn't have a corresponding
 # `single_version_override`.
-bazel_dep(name = "bazel_worker_api", version = "0.0.6")
+bazel_dep(name = "bazel_worker_api", version = "0.0.10")
 
 # @platforms is a pretty straightforward package, and there's seemingly no harm
 # in keeping it at the latest release.
