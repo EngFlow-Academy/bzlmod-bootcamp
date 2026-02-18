@@ -173,7 +173,9 @@ run_test_files() {
   duration="$(duration_since $start)"
   echo ''
 
-  _print_test_list "$BOLD_YELLOW" 'skipped' "$YELLOW" "${SKIPPED[@]}"
+  if [[ ${#SKIPPED[@]} -ne 0 ]]; then
+    _print_test_list "$BOLD_YELLOW" 'skipped' "$YELLOW" "${SKIPPED[@]}"
+  fi
 
   if [[ ${#FAILURES[@]} -eq 0 ]]; then
     echo -e "${BOLD_GREEN}${NUM_TESTS} test(s) passed in ${duration}${NC}"
